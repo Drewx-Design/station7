@@ -3,11 +3,17 @@ import { anthropic } from '@ai-sdk/anthropic'
 import { MicroJudgmentSchema, MicroJudgmentRequestSchema } from '@/lib/schemas'
 import { MICRO_JUDGMENT_SYSTEM } from '@/lib/prompts'
 import { SONNET_MODEL } from '@/lib/models'
+import { sanitizePromptInput, sanitizeArray } from '@/lib/sanitize'
 
 export const runtime = 'nodejs'
 
 export async function POST(req: Request) {
-  const body = await req.json()
+  let body
+  try { body = await req.json() } catch {
+    return new Response(JSON.stringify({ error: 'Invalid JSON' }), {
+      status: 400, headers: { 'Content-Type': 'application/json' },
+    })
+  }
   const parsed = MicroJudgmentRequestSchema.safeParse(body)
   if (!parsed.success) {
     return new Response(JSON.stringify({ error: 'Invalid request body' }), {
@@ -18,11 +24,16 @@ export async function POST(req: Request) {
 
   const { scenario, selections, priorNotes, priorMoods, creatureCount } = parsed.data
 
+  // Sanitize all user-controlled strings before prompt interpolation
+  const safeScenario = sanitizePromptInput(scenario, 2000)
+  const safePriorNotes = sanitizeArray(priorNotes ?? [])
+  const safePriorMoods = sanitizeArray(priorMoods ?? [], 100)
+
   // Build the assessment prompt from current state
   const traitsDescription = Object.entries(selections)
     .filter(([, trait]) => trait !== null)
     .map(([category, trait]) =>
-      `${category.toUpperCase()}: ${trait!.name} -- ${trait!.description}`
+      `${category.toUpperCase()}: ${sanitizePromptInput(trait!.name, 100)} -- ${sanitizePromptInput(trait!.description, 500)}`
     )
     .join('\n')
 
@@ -30,14 +41,14 @@ export async function POST(req: Request) {
 
   // Build scientist memory context
   let memoryContext = ''
-  if (priorNotes && priorNotes.length > 0) {
+  if (safePriorNotes.length > 0) {
     memoryContext = `\n\nYOUR PRIOR OBSERVATIONS (you said these -- build on them, don't repeat):
-${priorNotes.map((note: string, i: number) => `[Observation ${i + 1}] ${note}`).join('\n')}
+${safePriorNotes.map((note: string, i: number) => `[Observation ${i + 1}] ${note}`).join('\n')}
 
-YOUR EMOTIONAL TRAJECTORY SO FAR: ${priorMoods!.join(' -> ')}`
+YOUR EMOTIONAL TRAJECTORY SO FAR: ${safePriorMoods.join(' -> ')}`
   }
 
-  const prompt = `SCENARIO: ${scenario}
+  const prompt = `SCENARIO: ${safeScenario}
 
 CURRENTLY SELECTED TRAITS (${traitCount} of 4):
 ${traitsDescription}${memoryContext}

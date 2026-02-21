@@ -3,11 +3,13 @@
 import { useMemo } from 'react'
 import type { Creature } from '@/lib/schemas'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type PartialCreature = Record<string, any>
+// DeepPartial to match AI SDK's streaming output where arrays may contain undefined elements
+type DeepPartial<T> = {
+  [K in keyof T]?: T[K] extends (infer U)[] ? (U | undefined)[] : T[K]
+}
 
 export function CreatureCard({ creature, isStreaming }: {
-  creature: PartialCreature
+  creature: DeepPartial<Creature>
   isStreaming: boolean
 }) {
   const verdict = creature.verdict ?? 'mediocre'

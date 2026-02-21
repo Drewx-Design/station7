@@ -1,15 +1,8 @@
 'use client'
 
-import type { Trait, Round } from '@/lib/schemas'
+import type { Trait, Round, Selections } from '@/lib/schemas'
 import { TraitCard } from './TraitCard'
 import { useRef, useEffect } from 'react'
-
-type Selections = {
-  form: Trait | null
-  feature: Trait | null
-  ability: Trait | null
-  flaw: Trait | null
-}
 
 const CATEGORY_LABELS: Record<keyof Selections, string> = {
   form: 'FORM',

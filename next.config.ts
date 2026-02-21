@@ -1,5 +1,19 @@
 import type { NextConfig } from "next";
 
+const isDev = process.env.NODE_ENV !== 'production'
+
+// unsafe-eval is required in dev for Next.js hot module replacement.
+// In production, only unsafe-inline remains for style-src (inline styles in components).
+const csp = [
+  "default-src 'self'",
+  `script-src 'self'${isDev ? " 'unsafe-eval'" : ''}`,
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob:",
+  "font-src 'self' data:",
+  "connect-src 'self'",
+  "frame-ancestors 'none'",
+].join('; ')
+
 const nextConfig: NextConfig = {
   async headers() {
     return [
@@ -8,7 +22,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; frame-ancestors 'none'",
+            value: csp,
           },
           {
             key: 'X-Frame-Options',

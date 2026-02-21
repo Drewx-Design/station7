@@ -3,11 +3,20 @@ import { z } from 'zod'
 // === Shared Types ===
 
 export const TraitSchema = z.object({
-  name: z.string().describe('Trait name, 2-6 words'),
-  description: z.string().describe('Max 10 words. One clause, no subject. Spec sheet voice.'),
+  name: z.string().max(100).describe('Trait name, 2-6 words'),
+  description: z.string().max(500).describe('Max 10 words. One clause, no subject. Spec sheet voice.'),
 })
 
 export type Trait = z.infer<typeof TraitSchema>
+
+// === Shared UI Types ===
+
+export type Selections = {
+  form: Trait | null
+  feature: Trait | null
+  ability: Trait | null
+  flaw: Trait | null
+}
 
 // === Generate Round ===
 
@@ -34,15 +43,6 @@ export const MicroJudgmentSchema = z.object({
 
 export type MicroJudgment = z.infer<typeof MicroJudgmentSchema>
 
-// === Scientist History (client-side accumulation, passed as context to micro-judgment + brew) ===
-
-export const ScientistHistorySchema = z.object({
-  notes: z.array(z.string()),
-  moods: z.array(z.string()),
-})
-
-export type ScientistHistory = z.infer<typeof ScientistHistorySchema>
-
 // === Brew / Creature ===
 
 export const CreatureSchema = z.object({
@@ -64,14 +64,14 @@ export type Creature = z.infer<typeof CreatureSchema>
 export const MicroJudgmentRequestSchema = z.object({
   scenario: z.string().min(1).max(2000),
   selections: z.record(z.string(), TraitSchema.nullable()),
-  priorNotes: z.array(z.string()).max(10).optional().default([]),
-  priorMoods: z.array(z.string()).max(10).optional().default([]),
+  priorNotes: z.array(z.string().max(500)).max(10).optional().default([]),
+  priorMoods: z.array(z.string().max(100)).max(10).optional().default([]),
   creatureCount: z.number().int().min(0).max(1000).optional().default(0),
 })
 
 export const BrewRequestSchema = z.object({
   scenario: z.string().min(1).max(2000),
   selections: z.record(z.string(), TraitSchema),
-  accumulatedNotes: z.array(z.string()).max(10).optional().default([]),
-  moodTrajectory: z.array(z.string()).max(10).optional().default([]),
+  accumulatedNotes: z.array(z.string().max(500)).max(10).optional().default([]),
+  moodTrajectory: z.array(z.string().max(100)).max(10).optional().default([]),
 })

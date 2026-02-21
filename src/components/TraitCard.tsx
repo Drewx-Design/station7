@@ -1,8 +1,9 @@
 'use client'
 
+import { memo } from 'react'
 import type { Trait } from '@/lib/schemas'
 
-export function TraitCard({ trait, selected, onClick }: {
+export const TraitCard = memo(function TraitCard({ trait, selected, onClick }: {
   trait: Trait
   selected: boolean
   onClick: () => void
@@ -18,4 +19,4 @@ export function TraitCard({ trait, selected, onClick }: {
       <div className="trait-description">{trait.description}</div>
     </button>
   )
-}
+})

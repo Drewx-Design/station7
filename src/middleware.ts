@@ -1,49 +1,42 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { COOKIE_NAME, sign, verify } from '@/lib/session'
 
-const WINDOW_MS = 60_000 // 60 seconds
-const MAX_REQUESTS = 30
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl
 
-const hits = new Map<string, number[]>()
-
-// Periodic cleanup to prevent unbounded memory growth
-let lastCleanup = Date.now()
-function cleanup() {
-  const now = Date.now()
-  if (now - lastCleanup < WINDOW_MS) return
-  lastCleanup = now
-  for (const [key, timestamps] of hits) {
-    const valid = timestamps.filter(t => now - t < WINDOW_MS)
-    if (valid.length === 0) {
-      hits.delete(key)
-    } else {
-      hits.set(key, valid)
+  // --- API routes: require valid session token ---
+  if (pathname.startsWith('/api/')) {
+    const token = request.cookies.get(COOKIE_NAME)?.value
+    if (!token || !(await verify(token))) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 },
+      )
     }
-  }
-}
-
-export function middleware(request: NextRequest) {
-  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
-    ?? request.headers.get('x-real-ip')
-    ?? '127.0.0.1'
-
-  const now = Date.now()
-  cleanup()
-
-  const timestamps = (hits.get(ip) ?? []).filter(t => now - t < WINDOW_MS)
-  if (timestamps.length >= MAX_REQUESTS) {
-    return NextResponse.json(
-      { error: 'Rate limit exceeded. Try again shortly.' },
-      { status: 429, headers: { 'Retry-After': '60' } },
-    )
+    return NextResponse.next()
   }
 
-  timestamps.push(now)
-  hits.set(ip, timestamps)
+  // --- Page requests: issue session token if missing ---
+  const existing = request.cookies.get(COOKIE_NAME)?.value
+  if (existing && (await verify(existing))) {
+    return NextResponse.next()
+  }
 
-  return NextResponse.next()
+  // Issue a new signed session token
+  const timestamp = Date.now().toString(36)
+  const token = await sign(timestamp)
+  const response = NextResponse.next()
+  response.cookies.set(COOKIE_NAME, token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    path: '/',
+    maxAge: 60 * 60 * 24, // 24 hours
+  })
+  return response
 }
 
 export const config = {
-  matcher: '/api/:path*',
+  matcher: ['/api/:path*', '/((?!_next/static|_next/image|favicon.ico).*)'],
 }
