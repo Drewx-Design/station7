@@ -29,7 +29,7 @@ export const MicroJudgmentSchema = z.object({
   lab_mood: z.string().describe('Emotional state slug: fascinated, concerned, delighted, horrified, resigned, etc.'),
   color: z.string().describe('Hex color reflecting creature viability. Greens=viable, teals=uncertain, blues=doomed, golds=triumphant'),
   reading: z.string().describe('ALL-CAPS instrument readout, e.g. "BIOLOGICAL COHERENCE: 67% | SCENARIO VIABILITY: UNCERTAIN"'),
-  scientist_note: z.string().describe('2-4 sentences. The scientist building/revising a theory about this creature across the full arc of selections.'),
+  scientist_note: z.string().describe('MAXIMUM 2 sentences. One observation, one theory revision. Field journal register, plain text, no markdown or asterisks.'),
 })
 
 export type MicroJudgment = z.infer<typeof MicroJudgmentSchema>

@@ -357,6 +357,8 @@ body {
 .lab-placeholder {
   opacity: 0.3;
   font-style: italic;
+  text-align: center;
+  padding: 2rem 0;
 }
 
 /* Scientist notes fade-in */
@@ -375,30 +377,40 @@ body {
   }
 }
 
-/* Instrument readout -- monospace, clinical */
+/* Instrument readout -- monospace, clinical, centered */
 .lab-reading {
   font-family: var(--font-mono), 'JetBrains Mono', 'Fira Code', monospace;
   font-size: 0.75rem;
   letter-spacing: 0.05em;
   opacity: 0.7;
   text-transform: uppercase;
+  text-align: center;
   margin-bottom: 1rem;
 }
 
-/* Scientist note -- the main text */
+/* Scientist note -- the star. Large, centered, generous breathing room.
+   Two sentences pinned to a corkboard, not a dense log entry. */
 .lab-scientist-note {
-  font-size: 0.95rem;
-  line-height: 1.6;
+  font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
+  font-size: 1.15rem;
+  line-height: 1.9;
+  text-align: center;
+  padding: 1.5rem 0.5rem;
+  max-width: 480px;
+  margin: 0 auto;
 }
 
-/* Prior completed notes -- dimmed, stacked above current */
+/* Prior completed notes -- dimmed, centered, stacked above current */
 .lab-prior-note {
-  font-size: 0.85rem;
-  line-height: 1.5;
-  opacity: 0.5;
-  padding-bottom: 0.75rem;
-  margin-bottom: 0.75rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  text-align: center;
+  opacity: 0.4;
+  padding: 0.75rem 0.5rem;
+  margin: 0 auto 0.75rem;
+  max-width: 480px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 /* ============================================
