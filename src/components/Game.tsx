@@ -231,7 +231,6 @@ export default function Game() {
   return (
     <>
       <MoodBackground
-        orbColors={judgment.labState?.orb_colors}
         motionState={committedMotion}
         phase={phase}
       />
