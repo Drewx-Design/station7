@@ -344,6 +344,18 @@ body {
     width: 60vw;
     height: 60vw;
   }
+
+  /* Reveal: show dossier before SelectionSummary on mobile */
+  .game-layout[data-phase="reveal"] .trait-column {
+    order: 2;
+  }
+  .game-layout[data-phase="reveal"] .lab-column {
+    order: 1;
+  }
+
+  .creature-image-area {
+    max-height: 40vh;
+  }
 }
 
 /* ============================================
