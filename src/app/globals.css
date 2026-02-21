@@ -4,16 +4,76 @@
    XENOBIOLOGY STATION 7 -- GLOBAL STYLES
    ============================================ */
 
+/* === @PROPERTY REGISTRATIONS === */
 @property --mood-color {
-  syntax: '<color>';
-  inherits: false;
+  syntax: "<color>";
+  inherits: true;
   initial-value: #1a1a2e;
 }
 
+/* === DESIGN TOKENS === */
 :root {
+  /* --- existing --- */
   --background: #0a0a0f;
   --foreground: #e0e0e8;
+
+  /* --- surfaces (semi-transparent, mood bleeds through) --- */
+  --surface-1: rgba(255, 255, 255, 0.025);
+  --surface-2: rgba(255, 255, 255, 0.05);
+  --surface-3: rgba(255, 255, 255, 0.08);
+  --surface-4: rgba(255, 255, 255, 0.15);
+
+  /* --- borders --- */
+  --border-rest: rgba(255, 255, 255, 0.06);
+  --border-subtle: rgba(255, 255, 255, 0.12);
+  --border-hover: rgba(255, 255, 255, 0.22);
+  --border-active: rgba(255, 255, 255, 0.35);
+
+  /* --- accent (static green for UI affordances) ---
+     Reactivate HSB scale when --accent is used in 3+ visually distinct contexts.
+     Current uses: 2 (brew-ready button, focus-visible rings). */
+  --accent: #2db366;
+  --accent-dim: rgba(45, 179, 102, 0.15);
+  --accent-glow: rgba(45, 179, 102, 0.4);
+
+  /* --- typography sizes (substituted in Phase 1B) --- */
+  --text-headline: 1.75rem;
+  --text-display: 1.375rem;
+  --text-body: 1rem;
+  --text-secondary: 0.875rem;
+  --text-label: 0.6875rem;
+  --text-score: 3rem;
+
+  /* --- spacing (8px grid) --- */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 40px;
+  --space-6: 48px;
+
+  /* --- depth (inset shadows for materiality) --- */
+  --shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-bevel: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+
+  /* fallback for browsers without color-mix() */
+  --shadow-glow-mood: 0 0 12px rgba(255, 255, 255, 0.15);
+  --shadow-glow-accent: 0 0 12px var(--accent-dim);
 }
+
+@supports (color: color-mix(in srgb, red 50%, blue)) {
+  :root {
+    --shadow-glow-mood: 0 0 12px color-mix(in srgb, var(--mood-color, #1a1a2e) 30%, transparent);
+  }
+}
+
+/* === DEFERRED DESIGN SYSTEM ITEMS ===
+   1. Green accent HSB variations — Reactivate when --accent is used in 3+ visually
+      distinct contexts. Current uses: 2 (brew-ready, focus-visible).
+   2. Image placeholder areas — Reactivate when asset pipeline decision is made
+      (static vs AI-generated) and at least one asset exists for testing.
+   3. Verdict color tokenization — Tokenize if verdict types exceed 3 or if verdict
+      colors appear outside CreatureCard.tsx. */
 
 @theme inline {
   --color-background: var(--background);
@@ -134,7 +194,7 @@ body {
   bottom: 0;
   display: block;
   height: 2rem;
-  background: linear-gradient(to top, var(--mood-color, #0a0a0f), transparent);
+  background: linear-gradient(to top, var(--mood-color, #1a1a2e), transparent);
   pointer-events: none;
 }
 
@@ -171,9 +231,9 @@ body {
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-rest);
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--surface-1);
   color: var(--foreground);
   cursor: pointer;
   font-family: var(--font-mono), 'JetBrains Mono', 'Fira Code', monospace;
@@ -186,8 +246,8 @@ body {
 }
 
 .accordion-header:hover:not(:disabled) {
-  border-color: rgba(255, 255, 255, 0.15);
-  background: rgba(255, 255, 255, 0.04);
+  border-color: var(--border-hover);
+  background: var(--surface-2);
 }
 
 .accordion-header:disabled {
@@ -196,8 +256,8 @@ body {
 }
 
 .accordion-header[aria-expanded="true"] {
-  border-color: rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.03);
+  border-color: var(--border-subtle);
+  background: var(--surface-1);
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
@@ -265,7 +325,7 @@ body {
 
 .trait-card {
   padding: 0.75rem 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-subtle);
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -276,17 +336,22 @@ body {
 }
 
 .trait-card:hover {
-  border-color: rgba(255, 255, 255, 0.25);
+  border-color: var(--border-hover);
   transform: translateY(-1px);
 }
 
 .trait-card[data-selected="true"] {
-  border-color: var(--mood-color, rgba(255, 255, 255, 0.6));
-  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--mood-color, #1a1a2e);
+  background: var(--surface-2);
   box-shadow: 0 0 12px rgba(255, 255, 255, 0.15);
-  box-shadow: 0 0 12px color-mix(in srgb, var(--mood-color, #fff) 30%, transparent);
   transform: scale(1.02);
   animation: traitSelectPulse 0.4s ease-out;
+}
+
+@supports (color: color-mix(in srgb, red 50%, blue)) {
+  .trait-card[data-selected="true"] {
+    box-shadow: 0 0 12px color-mix(in srgb, var(--mood-color, #1a1a2e) 30%, transparent);
+  }
 }
 
 @keyframes traitSelectPulse {
@@ -296,11 +361,11 @@ body {
   }
   40% {
     transform: scale(1.05);
-    box-shadow: 0 0 20px color-mix(in srgb, var(--mood-color, #fff) 50%, transparent);
+    box-shadow: 0 0 20px color-mix(in srgb, var(--mood-color, #1a1a2e) 50%, transparent);
   }
   100% {
     transform: scale(1.02);
-    box-shadow: 0 0 12px color-mix(in srgb, var(--mood-color, #fff) 30%, transparent);
+    box-shadow: 0 0 12px color-mix(in srgb, var(--mood-color, #1a1a2e) 30%, transparent);
   }
 }
 
@@ -323,9 +388,9 @@ body {
 .brew-button {
   width: 100%;
   padding: 1rem 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--border-hover);
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--surface-2);
   color: var(--foreground);
   font-family: var(--font-mono), 'JetBrains Mono', 'Fira Code', monospace;
   font-size: 0.85rem;
@@ -341,18 +406,25 @@ body {
 }
 
 .brew-button:not(:disabled):hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.4);
+  background: var(--surface-3);
+  border-color: var(--border-active);
 }
 
 .brew-button.brew-ready-pulse {
-  border-color: var(--mood-color, rgba(255, 255, 255, 0.6));
+  border-color: var(--mood-color, #1a1a2e);
   animation: brewReadyPulse 2s ease-in-out infinite;
 }
 
 @keyframes brewReadyPulse {
   0%, 100% { box-shadow: 0 0 8px rgba(255, 255, 255, 0.1); }
-  50% { box-shadow: 0 0 20px color-mix(in srgb, var(--mood-color, #fff) 40%, transparent); }
+  50% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.25); }
+}
+
+@supports (color: color-mix(in srgb, red 50%, blue)) {
+  @keyframes brewReadyPulse {
+    0%, 100% { box-shadow: 0 0 8px rgba(255, 255, 255, 0.1); }
+    50% { box-shadow: 0 0 20px color-mix(in srgb, var(--mood-color, #1a1a2e) 40%, transparent); }
+  }
 }
 
 .brew-button.brewing {
@@ -362,9 +434,9 @@ body {
 .play-again-button {
   width: 100%;
   padding: 1rem 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid var(--border-hover);
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--surface-3);
   color: var(--foreground);
   font-family: var(--font-mono), 'JetBrains Mono', 'Fira Code', monospace;
   font-size: 0.85rem;
@@ -379,8 +451,8 @@ body {
 }
 
 .play-again-button:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.5);
+  background: var(--surface-4);
+  border-color: var(--border-active);
 }
 
 /* ============================================
@@ -417,8 +489,8 @@ body {
    ============================================ */
 
 .lab-notes-container {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--surface-1);
+  border: 1px solid var(--border-rest);
   border-radius: 12px;
   padding: 1.5rem;
   min-height: 200px;
@@ -494,7 +566,7 @@ body {
   padding: 0.75rem 0.5rem;
   margin: 0 auto 0.75rem;
   max-width: 480px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid var(--border-rest);
 }
 
 /* ============================================
@@ -599,7 +671,7 @@ body {
 
 .epitaph-rule {
   border: none;
-  border-top: 1px dashed rgba(255, 255, 255, 0.2);
+  border-top: 1px dashed var(--border-hover);
   margin-bottom: 0.75rem;
 }
 
@@ -684,7 +756,7 @@ body {
 .brew-error button {
   margin-top: 0.5rem;
   padding: 0.5rem 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--border-hover);
   border-radius: 4px;
   background: transparent;
   color: inherit;
@@ -704,7 +776,7 @@ body {
 }
 
 .bestiary {
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--border-rest);
   padding-top: 1.5rem;
 }
 
@@ -729,21 +801,21 @@ body {
 }
 
 .bestiary-scroll::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--surface-1);
   border-radius: 2px;
 }
 
 .bestiary-scroll::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--surface-3);
   border-radius: 2px;
 }
 
 .bestiary-card {
   flex: 0 0 280px;
   padding: 1rem 1.25rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-subtle);
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--surface-1);
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -801,6 +873,6 @@ body {
   font-style: italic;
   line-height: 1.4;
   opacity: 0.6;
-  border-left: 1px solid rgba(255, 255, 255, 0.15);
+  border-left: 1px solid var(--border-hover);
   padding-left: 0.75rem;
 }
