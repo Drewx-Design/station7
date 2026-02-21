@@ -694,6 +694,7 @@ body {
   padding: var(--space-2);
   min-height: 200px;
   max-height: calc(100vh - 8rem);
+  overflow: hidden;
   box-shadow: var(--shadow-bevel);
 }
 
