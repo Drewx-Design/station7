@@ -17,15 +17,15 @@
   --background: #121518;
   --foreground: #d4d8dc;
 
-  /* --- surfaces (neutral, mood bleeds through) --- */
-  --surface-1: rgba(255, 255, 255, 0.025);
-  --surface-2: rgba(255, 255, 255, 0.05);
-  --surface-3: rgba(255, 255, 255, 0.08);
-  --surface-4: rgba(255, 255, 255, 0.15);
+  /* --- surfaces (solid dark panels, mood only in gaps) --- */
+  --surface-1: #1a1e22;
+  --surface-2: #1e2328;
+  --surface-3: #24292e;
+  --surface-4: #2d3339;
 
   /* --- borders (neutral at rest, green on interaction) --- */
-  --border-rest: rgba(255, 255, 255, 0.08);
-  --border-subtle: rgba(255, 255, 255, 0.15);
+  --border-rest: rgba(255, 255, 255, 0.12);
+  --border-subtle: rgba(255, 255, 255, 0.20);
   --border-hover: rgba(45, 179, 102, 0.45);
   --border-active: rgba(45, 179, 102, 0.70);
 
@@ -197,7 +197,7 @@ body {
   bottom: 0;
   display: block;
   height: 2rem;
-  background: linear-gradient(to top, var(--mood-color, #0a1f14), transparent);
+  background: linear-gradient(to top, var(--surface-1), transparent);
   pointer-events: none;
 }
 
@@ -338,7 +338,7 @@ body {
   cursor: pointer;
   transition: border-color 0.2s ease, background-color 0.2s ease,
               box-shadow 0.2s ease, opacity 0.2s ease;
-  background: transparent;
+  background: var(--surface-2);
   color: inherit;
   text-align: left;
   font-family: inherit;
@@ -775,7 +775,7 @@ body {
   padding: var(--space-1) var(--space-2);
   border: 1px solid var(--border-hover);
   border-radius: 4px;
-  background: transparent;
+  background: var(--surface-2);
   color: inherit;
   cursor: pointer;
   font-family: var(--font-mono), monospace;
