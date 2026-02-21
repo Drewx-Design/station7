@@ -7,7 +7,7 @@ import { useRef, useState, useCallback, useEffect } from 'react'
 import { parse as parsePartialJson } from 'partial-json'
 import { FALLBACK_ROUND } from '@/lib/fallback-round'
 import { ScenarioBar } from './ScenarioBar'
-import { TraitGrid } from './TraitGrid'
+import { TraitAccordion } from './TraitAccordion'
 import { LabNotes } from './LabNotes'
 import { CreatureCard } from './CreatureCard'
 import { MoodLayer } from './MoodLayer'
@@ -40,10 +40,13 @@ export default function Game() {
 
   // Field Log counter -- starts at a random high number (Station 7 has been running forever).
   // Use a fixed initial value to avoid SSR/client hydration mismatch, then randomize on mount.
+  const [expandedCategory, setExpandedCategory] = useState<keyof Selections>('form')
   const [fieldLogNumber, setFieldLogNumber] = useState(47)
   useEffect(() => { setFieldLogNumber(Math.floor(Math.random() * 200) + 30) }, [])
   const [bestiary, setBestiary] = useState<Creature[]>([])
   const abortRef = useRef<AbortController | null>(null)
+  const selectionsRef = useRef(selections)
+  useEffect(() => { selectionsRef.current = selections }, [selections])
 
   // Judgment counter for stable React keys (increments on each new judgment, not on partial updates)
   const judgmentCountRef = useRef(0)
@@ -77,7 +80,11 @@ export default function Game() {
     schema: RoundSchema,
     onFinish({ object }) {
       if (object) {
-        setRound(object as Round)
+        // Only replace round if player hasn't started selecting
+        const hasSelections = Object.values(selectionsRef.current).some(s => s !== null)
+        if (!hasSelections) {
+          setRound(object as Round)
+        }
         setPhase('drafting')
       }
     },
@@ -224,6 +231,7 @@ export default function Game() {
       debounceRef.current = null
     }
     setSelections({ form: null, feature: null, ability: null, flaw: null })
+    setExpandedCategory('form')
     setAccumulatedNotes([])
     setMoodTrajectory([])
     setLabState(null)
@@ -259,24 +267,15 @@ export default function Game() {
 
         {/* Left column: traits */}
         <div className="trait-column" data-phase={phase}>
-          {(phase === 'drafting' || phase === 'reveal') && (
-            <TraitGrid
+          {(phase === 'drafting' || phase === 'reveal' || phase === 'brewing') && (
+            <TraitAccordion
               round={round}
               selections={selections}
               onSelect={onTraitSelect}
               disabled={phase !== 'drafting'}
+              expandedCategory={expandedCategory}
+              onExpand={setExpandedCategory}
             />
-          )}
-
-          {phase === 'brewing' && (
-            <div className="brewing-state">
-              <TraitGrid
-                round={round}
-                selections={selections}
-                onSelect={onTraitSelect}
-                disabled={true}
-              />
-            </div>
           )}
 
           {phase === 'loading' && (
