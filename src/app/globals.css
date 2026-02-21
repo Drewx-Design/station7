@@ -259,6 +259,7 @@ body {
   display: flex;
   gap: 12px;
   align-items: stretch;
+  max-height: calc(100vh - 12rem);
 }
 
 /* Site header -- identity bar */
