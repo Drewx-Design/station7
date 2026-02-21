@@ -43,7 +43,7 @@ export const MicroJudgmentSchema = z.object({
     '2-3 hex colors (#RRGGBB) for background atmosphere orbs. First color is primary mood. Second is complementary or contrasting. Optional third adds depth. Greens/ambers for viable, teals/purples for uncertain, deep blues for doomed, warm golds for triumphant.'
   ),
   reading: z.string().describe('ALL-CAPS instrument readout, e.g. "BIOLOGICAL COHERENCE: 67% | SCENARIO VIABILITY: UNCERTAIN"'),
-  scientist_note: z.string().describe('MAXIMUM 2 sentences. One observation, one theory revision. Field journal register, plain text, no markdown or asterisks.'),
+  scientist_note: z.string().describe('MAXIMUM 2 thoughts, complete or not. Fragments and abandoned clauses are expected. Field journal register, plain text, no markdown or asterisks.'),
 })
 
 export type MicroJudgment = z.infer<typeof MicroJudgmentSchema>

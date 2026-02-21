@@ -788,11 +788,6 @@ body {
   opacity: 0.35;
 }
 
-.lab-prior-note[data-interrupted]::after {
-  content: '\2014';  /* em-dash */
-  opacity: 0.5;
-}
-
 /* ============================================
    STREAMING CURSOR
    ============================================ */

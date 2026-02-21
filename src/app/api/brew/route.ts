@@ -45,6 +45,7 @@ YOU ARRIVED AT: ${safeMoods[safeMoods.length - 1]}`
   const cappedNotes = safeNotes.slice(-6)
   const notesContext = cappedNotes.length > 0
     ? `YOUR ACCUMULATED FIELD NOTES FROM THE DRAFT PHASE:
+(These notes were written under real-time observation pressure. Fragments and interrupted thoughts are intentional -- extract what you can.)
 ${cappedNotes.map((note: string, i: number) => `[Observation ${i + 1}] ${note}`).join('\n\n')}`
     : ''
 
