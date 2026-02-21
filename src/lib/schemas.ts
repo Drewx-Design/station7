@@ -43,6 +43,10 @@ export const MicroJudgmentSchema = z.object({
 
 export type MicroJudgment = z.infer<typeof MicroJudgmentSchema>
 
+// === Note Entry (client-side only — interrupted flag is for display, not API) ===
+
+export type NoteEntry = { text: string; interrupted: boolean }
+
 // === Brew / Creature ===
 
 export const CreatureSchema = z.object({
