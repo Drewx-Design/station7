@@ -27,6 +27,11 @@ function parseReading(raw: string): Segment[] {
     .filter((s): s is Segment => s !== null)
 }
 
+const PLACEHOLDER_SEGMENTS: Segment[] = [
+  { name: '\u2014', value: '\u2014', percent: null },
+  { name: '\u2014', value: '\u2014', percent: null },
+]
+
 export function InstrumentStrip({ reading, brewReady, judgmentKey }: {
   reading: string | undefined
   brewReady: boolean
@@ -42,16 +47,13 @@ export function InstrumentStrip({ reading, brewReady, judgmentKey }: {
     )
   }
 
-  const segments = reading ? parseReading(reading) : []
-
-  if (segments.length === 0) {
-    return <div className="instrument-strip" aria-live="polite" />
-  }
+  const segments = reading ? parseReading(reading) : PLACEHOLDER_SEGMENTS
+  const isEmpty = !reading
 
   return (
-    <div className="instrument-strip" aria-live="polite" key={judgmentKey}>
+    <div className="instrument-strip" aria-live="polite" data-empty={isEmpty || undefined}>
       {segments.map((seg, i) => (
-        <div className="gauge-segment" key={`${judgmentKey}-${i}`}>
+        <div className="gauge-segment" key={isEmpty ? `empty-${i}` : `${judgmentKey}-${i}`}>
           <div className="gauge-label">{seg.name}</div>
           {seg.percent !== null ? (
             <>

@@ -199,7 +199,7 @@ export function LabNotes({ labState, isLoading, judgmentKey, priorNotes, onInter
           {muteIcon}
         </button>
         <div className="lab-notes">
-          <p className="lab-placeholder">Awaiting specimen data...</p>
+          <div className="lab-scientist-note"><span className="streaming-cursor" /></div>
         </div>
       </>
     )

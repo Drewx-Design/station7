@@ -192,13 +192,20 @@ body {
 /* Scenario bar -- hero mission briefing banner */
 .scenario-bar {
   flex: 1;
+  display: flex;
+  flex-direction: column;
   background: var(--surface-1);
   border: 1px solid var(--border-rest);
   border-bottom: 3px solid var(--accent);
   border-radius: 6px;
   padding: var(--space-3);
+  padding-bottom: 0;
   box-shadow: var(--shadow-bevel), var(--shadow-inset);
   transition: opacity 0.5s ease;
+}
+
+.scenario-bar .scenario-text {
+  flex: 1;
 }
 
 /* Dim scenario bar during brewing/reveal so creature card dominates */
@@ -295,15 +302,16 @@ body {
 .trait-accordion {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-rest);
   border-radius: 8px;
   overflow: hidden;
+  background: var(--surface-2);
 }
 
 .accordion-category {
   padding: var(--space-2);
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-right: 1px solid var(--border-rest);
+  border-bottom: 1px solid var(--border-rest);
 }
 
 /* Remove border from right column */
@@ -328,7 +336,7 @@ body {
   gap: var(--space-1);
   padding: 4px 0;
   margin-bottom: var(--space-1);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--border-rest);
   color: var(--color-label);
   font-family: var(--font-mono), 'JetBrains Mono', 'Fira Code', monospace;
   font-size: var(--text-label);
@@ -399,7 +407,7 @@ body {
   border-radius: 8px;
   cursor: pointer;
   transition: border-color 0.2s ease, background-color 0.2s ease,
-              box-shadow 0.2s ease, opacity 0.2s ease;
+              box-shadow 0.2s ease;
   background: var(--surface-2);
   color: inherit;
   text-align: left;
@@ -448,7 +456,6 @@ body {
 
 .trait-card .trait-description {
   font-size: 0.75rem; /* 12px */
-  opacity: 0.6;
   line-height: 1rem; /* 16px */
 }
 
@@ -607,7 +614,7 @@ body {
   display: flex;
   flex-direction: column;
   flex: 1;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--surface-2);
   border: 1px solid var(--border-rest);
   border-left: 2px solid var(--accent);
   border-radius: 12px;
@@ -661,7 +668,7 @@ body {
    characters drip in via typewriter effect. */
 .lab-scientist-note {
   font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
-  font-size: var(--text-body);
+  font-size: 22px;
   line-height: 1.5;
   text-align: left;
   padding: var(--space-1) var(--space-1);
@@ -672,37 +679,31 @@ body {
 /* Prior completed notes -- same size as current, slightly faded. Chat log. */
 .lab-prior-note {
   font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
-  font-size: var(--text-body);
+  font-size: 22px;
   line-height: 1.5;
   text-align: left;
-  opacity: 0.55;
   padding: var(--space-1) var(--space-1);
   margin: 0 0 var(--space-1);
   max-width: 480px;
   border-bottom: 1px solid var(--border-rest);
-  transition: opacity 0.3s ease;
 }
 
-/* Interrupted fragment — frozen mid-thought */
-.lab-prior-note[data-interrupted] {
-  opacity: 0.35;
-}
 
 /* ============================================
    STREAMING CURSOR
    ============================================ */
 
 .streaming-cursor::after {
-  content: '|';
-  animation: cursorBlink 1s ease-in-out infinite;
-  opacity: 0.6;
-  margin-left: 2px;
-  font-weight: 300;
+  content: '\2588'; /* full block character — thick cursor */
+  color: var(--accent);
+  animation: cursorBlink 1s step-end infinite;
+  margin-left: 1px;
+  font-size: 0.9em;
 }
 
 @keyframes cursorBlink {
-  0%, 100% { opacity: 0.1; }
-  50% { opacity: 0.6; }
+  0%, 50% { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
 }
 
 /* ============================================
@@ -746,7 +747,7 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .streaming-cursor::after {
     animation: none;
-    opacity: 0.4;
+    opacity: 1;
   }
 }
 
@@ -762,6 +763,11 @@ body {
   min-height: 40px;
   align-items: center;
   flex-shrink: 0;
+  margin-top: auto;
+}
+
+.instrument-strip[data-empty] {
+  opacity: 0.3;
 }
 
 .instrument-strip[data-brew-ready] {
