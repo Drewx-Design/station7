@@ -99,6 +99,7 @@ export default function Game() {
           imageUrl: null,
           selections: { ...selectionsRef.current },
           fieldLogNumber: newFieldLogNumber,
+          scenario: round.scenario,
         }
 
         setPhase('reveal')

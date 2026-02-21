@@ -100,6 +100,7 @@ export function DossierOverlay({ entry, imageLoading, onDismiss, onPlayAgain }: 
           imageLoading={imageLoading}
           fieldLogNumber={entry.fieldLogNumber}
           selections={entry.selections}
+          scenario={entry.scenario}
           titleId="dossier-overlay-title"
         />
 

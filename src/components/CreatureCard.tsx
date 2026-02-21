@@ -22,13 +22,14 @@ const WATERMARK_TEXT: Record<string, string> = {
   catastrophic: 'INCIDENT REPORT',
 }
 
-export function CreatureCard({ creature, isStreaming, imageUrl, imageLoading, fieldLogNumber, selections, titleId }: {
+export function CreatureCard({ creature, isStreaming, imageUrl, imageLoading, fieldLogNumber, selections, scenario, titleId }: {
   creature: DeepPartial<Creature>
   isStreaming: boolean
   imageUrl?: string | null
   imageLoading?: boolean
   fieldLogNumber?: number
   selections?: Selections
+  scenario?: string
   titleId?: string
 }) {
   const verdict = creature.verdict ?? 'marginal'
@@ -123,6 +124,11 @@ export function CreatureCard({ creature, isStreaming, imageUrl, imageLoading, fi
           {score !== undefined && <span className="verdict-score">[{score}]</span>}
         </span>
       </div>
+
+      {/* SCENARIO CONTEXT */}
+      {scenario && (
+        <p className="dossier-scenario field-appear field-delay-0">{scenario}</p>
+      )}
 
       {/* NAME */}
       {creature.name && (
