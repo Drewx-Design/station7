@@ -411,9 +411,10 @@ body {
 }
 
 .brew-button:disabled {
-  opacity: 0.4;
   cursor: not-allowed;
   background: var(--surface-1);
+  color: rgba(212, 216, 220, 0.35);
+  border-color: rgba(255, 255, 255, 0.06);
 }
 
 .brew-button:not(:disabled):hover {
