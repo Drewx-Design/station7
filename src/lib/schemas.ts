@@ -36,12 +36,18 @@ export type Round = z.infer<typeof RoundSchema>
 
 export const MicroJudgmentSchema = z.object({
   lab_mood: z.string().describe('Emotional state slug: fascinated, concerned, delighted, horrified, resigned, etc.'),
-  color: z.string().describe('Hex color reflecting creature viability. Greens=viable, teals=uncertain, blues=doomed, golds=triumphant'),
+  motion_state: z.enum(['agitated', 'curious', 'resolved']).describe(
+    'Energy level of the lab atmosphere. agitated = alarmed/fascinated/horrified (fast, chaotic). curious = intrigued/uncertain/analyzing (medium, searching). resolved = satisfied/resigned/triumphant (slow, settled).'
+  ),
+  orb_colors: z.array(z.string()).min(2).max(3).describe(
+    '2-3 hex colors (#RRGGBB) for background atmosphere orbs. First color is primary mood. Second is complementary or contrasting. Optional third adds depth. Greens/ambers for viable, teals/purples for uncertain, deep blues for doomed, warm golds for triumphant.'
+  ),
   reading: z.string().describe('ALL-CAPS instrument readout, e.g. "BIOLOGICAL COHERENCE: 67% | SCENARIO VIABILITY: UNCERTAIN"'),
   scientist_note: z.string().describe('MAXIMUM 2 sentences. One observation, one theory revision. Field journal register, plain text, no markdown or asterisks.'),
 })
 
 export type MicroJudgment = z.infer<typeof MicroJudgmentSchema>
+export type MotionState = MicroJudgment['motion_state']
 
 // === Brew / Creature ===
 

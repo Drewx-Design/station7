@@ -2,13 +2,14 @@
 
 import { experimental_useObject as useObject } from '@ai-sdk/react'
 import { CreatureSchema } from '@/lib/schemas'
-import type { Trait, Creature, Selections } from '@/lib/schemas'
+import type { Trait, Creature, Selections, MotionState } from '@/lib/schemas'
 import { useRef, useState, useCallback, useEffect } from 'react'
 import { ScenarioBar } from './ScenarioBar'
 import { TraitAccordion } from './TraitAccordion'
 import { LabNotes } from './LabNotes'
 import { CreatureCard } from './CreatureCard'
 import { Bestiary } from './Bestiary'
+import { MoodBackground } from './MoodBackground'
 import { useScientistMemory } from '@/hooks/useScientistMemory'
 import { useMicroJudgment } from '@/hooks/useMicroJudgment'
 import { useRoundGeneration } from '@/hooks/useRoundGeneration'
@@ -24,6 +25,7 @@ export default function Game() {
   const [fieldLogNumber, setFieldLogNumber] = useState(47)
   useEffect(() => { setFieldLogNumber(Math.floor(Math.random() * 200) + 30) }, [])
   const [bestiary, setBestiary] = useState<Creature[]>([])
+  const [committedMotion, setCommittedMotion] = useState<MotionState>('resolved')
 
   const selectionsRef = useRef(selections)
   useEffect(() => { selectionsRef.current = selections }, [selections])
@@ -101,6 +103,7 @@ export default function Game() {
     setSelections({ form: null, feature: null, ability: null, flaw: null })
     setExpandedCategory('form')
     memory.clear()
+    setCommittedMotion('resolved')
     setBrewError(false)
     setPhase('loading')
     roundStream.submit({})
@@ -109,11 +112,20 @@ export default function Game() {
 
   // --- Ambient mood ---
   useEffect(() => {
-    if (judgment.labState?.color && /^#[0-9a-fA-F]{6}$/.test(judgment.labState.color)) {
-      document.documentElement.style.setProperty('--mood-color', judgment.labState.color)
+    const primaryColor = judgment.labState?.orb_colors?.[0]
+    if (primaryColor && /^#[0-9a-fA-F]{6}$/.test(primaryColor)) {
+      document.documentElement.style.setProperty('--mood-color', primaryColor)
     }
     return () => { document.documentElement.style.removeProperty('--mood-color') }
-  }, [judgment.labState?.color])
+  }, [judgment.labState?.orb_colors])
+
+  // Commit motion state only when fully valid (prevents partial-streaming remounts)
+  useEffect(() => {
+    const raw = judgment.labState?.motion_state
+    if (raw === 'agitated' || raw === 'curious' || raw === 'resolved') {
+      setCommittedMotion(raw)
+    }
+  }, [judgment.labState?.motion_state])
 
   // Derived state
   const allSelected = !!(selections.form && selections.feature && selections.ability && selections.flaw)
@@ -122,7 +134,11 @@ export default function Game() {
 
   return (
     <>
-      <div className="mood-layer" />
+      <MoodBackground
+        orbColors={judgment.labState?.orb_colors}
+        motionState={committedMotion}
+        phase={phase}
+      />
       <div className="game-layout">
         <ScenarioBar
           scenario={phase === 'loading' ? 'Station 7 is preparing your assignment...' : round.scenario}
