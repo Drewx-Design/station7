@@ -7,7 +7,11 @@ Generate one absurd human scenario and a pool of creature traits for a new round
 
 THE SCENARIO:
 A mundane human situation that a creature must survive or accomplish. Specific, visual, funny. The creature is being dropped into this situation and must get through it.
-Examples: "survive a 3-hour road trip as the backseat passenger with two toddlers," "deliver a TED talk on blockchain to an audience that just wants lunch," "work the front desk at a busy hotel for a full shift."
+Maximum 15 words. One clause. No preamble, no "survive a..." framing -- just state the situation.
+Wrong: "Navigate through a crowded shopping mall during the holiday season while carrying multiple bags of gifts" (too long, too wordy)
+Right: "3-hour road trip, backseat, two toddlers"
+Right: "TED talk on blockchain, audience wants lunch"
+Right: "front desk at a busy hotel, full shift"
 
 THE TRAITS:
 - FORM (exactly 3): Core body, shape, material, size. Physical identity.
