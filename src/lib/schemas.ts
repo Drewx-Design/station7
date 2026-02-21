@@ -66,6 +66,7 @@ export const MicroJudgmentRequestSchema = z.object({
   selections: z.record(z.string(), TraitSchema.nullable()),
   priorNotes: z.array(z.string()).max(10).optional().default([]),
   priorMoods: z.array(z.string()).max(10).optional().default([]),
+  creatureCount: z.number().int().min(0).max(1000).optional().default(0),
 })
 
 export const BrewRequestSchema = z.object({

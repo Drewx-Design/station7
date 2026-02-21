@@ -113,6 +113,7 @@ export default function Game() {
           selections: currentSelections,
           priorNotes: accumulatedNotesRef.current,
           priorMoods: moodTrajectoryRef.current,
+          creatureCount: bestiary.length,
         }),
         signal: controller.signal,
       })

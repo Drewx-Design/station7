@@ -16,7 +16,7 @@ export async function POST(req: Request) {
     })
   }
 
-  const { scenario, selections, priorNotes, priorMoods } = parsed.data
+  const { scenario, selections, priorNotes, priorMoods, creatureCount } = parsed.data
 
   // Build the assessment prompt from current state
   const traitsDescription = Object.entries(selections)
@@ -44,10 +44,14 @@ ${traitsDescription}${memoryContext}
 
 Provide your updated assessment.`
 
+  const system = creatureCount > 0
+    ? `${MICRO_JUDGMENT_SYSTEM}\n\nCROSS-ROUND CONTEXT: You have catalogued ${creatureCount} specimen${creatureCount === 1 ? '' : 's'} before this one. You are not new to this. Let that experience inflect your tone -- weariness, pattern recognition, rising standards, or the creeping suspicion that the universe is testing you.`
+    : MICRO_JUDGMENT_SYSTEM
+
   const result = streamObject({
     model: anthropic(SONNET_MODEL),
     schema: MicroJudgmentSchema,
-    system: MICRO_JUDGMENT_SYSTEM,
+    system,
     prompt,
     temperature: 0.8,
     onError({ error }) {
