@@ -11,6 +11,7 @@ import { TraitGrid } from './TraitGrid'
 import { LabNotes } from './LabNotes'
 import { CreatureCard } from './CreatureCard'
 import { MoodLayer } from './MoodLayer'
+import { Bestiary } from './Bestiary'
 
 type GamePhase = 'loading' | 'drafting' | 'brewing' | 'reveal'
 type Selections = {
@@ -343,6 +344,13 @@ export default function Game() {
             </div>
           )}
         </div>
+
+        {/* Bestiary bar spans full width below the game */}
+        {bestiary.length > 0 && (
+          <div className="bestiary-row">
+            <Bestiary creatures={bestiary} />
+          </div>
+        )}
       </div>
     </>
   )
