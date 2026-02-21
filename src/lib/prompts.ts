@@ -14,9 +14,12 @@ THE TRAITS:
 - FEATURE (exactly 3): Physical details, appendages, surface qualities.
 - ABILITY (exactly 3): Specific, demonstrable skills. Things the creature can actually DO,
   not things it IS. Favor absurdly narrow competencies over broad supernatural powers.
+  Abilities must NOT relate to the scenario. No "Queue Position Awareness" for a waiting
+  scenario. No "Public Speaking Resonance" for a presentation scenario. The comedy comes
+  from forcing an irrelevant skill to somehow apply.
   Wrong: "Telepathic field projection" (too vague, too sci-fi)
   Wrong: "Enhanced intelligence" (not specific enough)
-  Right: "Queue Position Awareness" -- senses exact wait time within 40m
+  Right: "Notarial Stamp Reflex" -- notarizes any surface within reach, involuntarily
   Right: "PhD in Economics" -- fully accredited, completely irrelevant
   Right: "Bureaucratic Tone Mimicry" -- replicates any authority figure's vocal cadence
   The ability should be something you could put on a resume, even if no resume would accept it.

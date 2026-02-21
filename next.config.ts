@@ -6,7 +6,7 @@ const isDev = process.env.NODE_ENV !== 'production'
 // In production, only unsafe-inline remains for style-src (inline styles in components).
 const csp = [
   "default-src 'self'",
-  `script-src 'self'${isDev ? " 'unsafe-eval'" : ''}`,
+  `script-src 'self'${isDev ? " 'unsafe-inline' 'unsafe-eval'" : ''}`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:",
   "font-src 'self' data:",

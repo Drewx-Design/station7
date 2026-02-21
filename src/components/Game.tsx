@@ -7,7 +7,6 @@ import { useRef, useState, useCallback, useEffect } from 'react'
 import { SiteHeader, ScenarioBar } from './ScenarioBar'
 import { TraitAccordion } from './TraitAccordion'
 import { LabNotes } from './LabNotes'
-import { CreatureCard } from './CreatureCard'
 import { SelectionSummary } from './SelectionSummary'
 import { Bestiary } from './Bestiary'
 import { DossierOverlay } from './DossierOverlay'
@@ -197,6 +196,7 @@ export default function Game() {
     setCommittedMotion('resolved')
     setSwapCount(0)
     setBrewError(false)
+    document.documentElement.style.removeProperty('--mood-color')
     setPhase('loading')
     roundStream.submit({})
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -216,13 +216,20 @@ export default function Game() {
   }, [])
 
   // --- Ambient mood (activates after first trait swap) ---
+  // Only sets --mood-color when a new valid color arrives.
+  // Does NOT remove on labState change — mood persists through brew/reveal.
+  // Cleared explicitly in onPlayAgain and on unmount.
   useEffect(() => {
     const primaryColor = judgment.labState?.orb_colors?.[0]
     if (swapCount >= 1 && primaryColor && /^#[0-9a-fA-F]{6}$/.test(primaryColor)) {
       document.documentElement.style.setProperty('--mood-color', primaryColor)
     }
-    return () => { document.documentElement.style.removeProperty('--mood-color') }
   }, [judgment.labState?.orb_colors, swapCount])
+
+  // Cleanup --mood-color on unmount only
+  useEffect(() => {
+    return () => { document.documentElement.style.removeProperty('--mood-color') }
+  }, [])
 
   // Commit motion state only when fully valid (prevents partial-streaming remounts)
   useEffect(() => {
@@ -270,14 +277,7 @@ export default function Game() {
           {phase === 'brewing' && (
             <div className="lab-notes-container brewing">
               <h3 className="lab-title">SYNTHESIZING SPECIMEN</h3>
-              {brewStream.object ? (
-                <CreatureCard
-                  creature={brewStream.object}
-                  isStreaming={brewStream.isLoading}
-                />
-              ) : (
-                <p className="lab-placeholder">Initiating brew sequence...</p>
-              )}
+              <p className="lab-placeholder">Initiating brew sequence...</p>
             </div>
           )}
 
