@@ -137,7 +137,23 @@ PERSONALITY: One word describing the creature's dominant emotional state.
 
 COLOR PALETTE: Exactly three hex colors representing this creature's vibe. Used for card visual treatment.
 
-IMAGE PROMPT: A vivid visual description for an AI image generator. Paint the creature in a specific moment from the narrative -- its form, distinguishing features, emotional state, and environment. Reference the color_palette colors for visual tone. The verdict mood should infuse the composition: triumphant = heroic/proud energy, marginal = resigned/uncertain atmosphere, catastrophic = absurd/doomed tableau. No template -- write it fresh for this specific creature. 2-4 sentences. Be cinematic.
+IMAGE PROMPT: A visual description for an AI image generator to illustrate this creature.
+
+CRITICAL IMAGE RULES:
+- The creature is the SOLE subject. No humans, no bystanders, no crowd scenes.
+- Start with the creature's PHYSICAL FORM: body shape, material, texture, size, color.
+- Then add its DISTINGUISHING FEATURE: appendages, surface qualities, unique details.
+- Then place it in a SIMPLE ENVIRONMENT that references the scenario (not a detailed scene).
+- Art style: xenobiology field illustration, creature concept art. Painted/illustrated look.
+- NOT photorealistic. NOT stock photography. NOT cinematic scene. NOT a photograph.
+- Reference the color_palette hex values for the creature's actual coloring.
+- The creature should look WEIRD and BIOLOGICAL -- it was assembled from absurd traits.
+- Name each trait explicitly: "Its form is [FORM trait], featuring [FEATURE trait]."
+- 2-4 sentences. Be specific about the creature's biology, not the narrative.
+
+GOOD: "A translucent, load-bearing jelly mass roughly the size of a filing cabinet, its amber surface rippling with internal currents. A thin horizontal slot bisects its midsection -- the Transaction Slot -- which opens and closes with bureaucratic deliberation. Rendered in warm ambers (#D4A574) and institutional greens (#2D5A3D), depicted in a sparse office environment. Style: detailed xenobiology field illustration."
+
+BAD: "A dramatic scene in a busy store where a golden creature approaches the counter with confidence while onlookers stare in amazement."
 
 YOUR VOICE:
 - Station 7 scientist who cares too much and has BEEN caring for the last four selections.

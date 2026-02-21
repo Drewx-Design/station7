@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { parse as parsePartialJson } from 'partial-json'
-import type { Trait, Round, MicroJudgment, Creature, NoteEntry } from '@/lib/schemas'
+import type { Trait, Round, MicroJudgment, BestiaryEntry, NoteEntry } from '@/lib/schemas'
 
 export function useMicroJudgment(
   round: Round,
@@ -8,7 +8,7 @@ export function useMicroJudgment(
     accumulatedNotesRef: React.RefObject<NoteEntry[]>
     moodTrajectoryRef: React.RefObject<string[]>
   },
-  bestiaryRef: React.RefObject<Creature[]>,
+  bestiaryRef: React.RefObject<BestiaryEntry[]>,
   onNoteAccumulated: (note: string, mood: string) => void,
 ) {
   const [labState, setLabState] = useState<Partial<MicroJudgment> | null>(null)

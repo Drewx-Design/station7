@@ -2,7 +2,7 @@
 
 import { experimental_useObject as useObject } from '@ai-sdk/react'
 import { CreatureSchema } from '@/lib/schemas'
-import type { Trait, Creature, Selections, MotionState } from '@/lib/schemas'
+import type { Trait, Creature, Selections, MotionState, BestiaryEntry } from '@/lib/schemas'
 import { useRef, useState, useCallback, useEffect } from 'react'
 import { SiteHeader, ScenarioBar } from './ScenarioBar'
 import { TraitAccordion } from './TraitAccordion'
@@ -10,6 +10,7 @@ import { LabNotes } from './LabNotes'
 import { CreatureCard } from './CreatureCard'
 import { SelectionSummary } from './SelectionSummary'
 import { Bestiary } from './Bestiary'
+import { DossierOverlay } from './DossierOverlay'
 import { MoodBackground } from './MoodBackground'
 import { useScientistMemory } from '@/hooks/useScientistMemory'
 import { useMicroJudgment } from '@/hooks/useMicroJudgment'
@@ -25,11 +26,11 @@ export default function Game() {
   // expandedCategory removed — all categories visible simultaneously
   const [fieldLogNumber, setFieldLogNumber] = useState(47)
   useEffect(() => { setFieldLogNumber(Math.floor(Math.random() * 200) + 30) }, [])
-  const [bestiary, setBestiary] = useState<Creature[]>([])
+  const [bestiary, setBestiary] = useState<BestiaryEntry[]>([])
+  const [overlayEntry, setOverlayEntry] = useState<BestiaryEntry | null>(null)
   const [committedMotion, setCommittedMotion] = useState<MotionState>('resolved')
 
   // Image generation state
-  const [imageUrl, setImageUrl] = useState<string | null>(null)
   const [imageLoading, setImageLoading] = useState(false)
   const imageAbortRef = useRef<AbortController | null>(null)
 
@@ -90,12 +91,22 @@ export default function Game() {
     schema: CreatureSchema,
     onFinish({ object }) {
       if (object) {
+        const creature = object as Creature
+        const newFieldLogNumber = fieldLogNumber + 1
+        const entry: BestiaryEntry = {
+          creature,
+          imageUrl: null,
+          selections: { ...selectionsRef.current },
+          fieldLogNumber: newFieldLogNumber,
+        }
+
         setPhase('reveal')
-        setFieldLogNumber(n => n + 1)
-        setBestiary(prev => [...prev, object as Creature].slice(-20))
+        setFieldLogNumber(newFieldLogNumber)
+        setBestiary(prev => [...prev, entry].slice(-20))
+        setOverlayEntry(entry)
 
         // Trigger image generation (progressive enhancement)
-        if (object.image_prompt) {
+        if (creature.image_prompt) {
           setImageLoading(true)
           imageAbortRef.current = new AbortController()
           fetch('/api/generate-image', {
@@ -103,14 +114,26 @@ export default function Game() {
             signal: imageAbortRef.current.signal,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              image_prompt: object.image_prompt,
-              color_palette: object.color_palette,
-              verdict: object.verdict,
+              image_prompt: creature.image_prompt,
+              color_palette: creature.color_palette,
+              verdict: creature.verdict,
             }),
           })
             .then(res => res.json())
             .then(data => {
-              if (data.imageUrl) setImageUrl(data.imageUrl)
+              if (data.imageUrl) {
+                // Update bestiary entry with resolved image
+                setBestiary(prev => {
+                  const updated = [...prev]
+                  const idx = updated.findIndex(e => e.creature === creature)
+                  if (idx !== -1) updated[idx] = { ...updated[idx], imageUrl: data.imageUrl }
+                  return updated
+                })
+                // Update overlay if still showing this creature
+                setOverlayEntry(prev =>
+                  prev?.creature === creature ? { ...prev, imageUrl: data.imageUrl } : prev
+                )
+              }
             })
             .catch(() => {}) // Silent failure — image is progressive enhancement
             .finally(() => setImageLoading(false))
@@ -158,8 +181,8 @@ export default function Game() {
   const onPlayAgain = useCallback(() => {
     judgment.cancelTurn()  // ignore return — full reset
     imageAbortRef.current?.abort()
-    setImageUrl(null)
     setImageLoading(false)
+    setOverlayEntry(null)
     setSelections({ form: null, feature: null, ability: null, flaw: null })
     memory.clear()
     setCommittedMotion('resolved')
@@ -168,6 +191,19 @@ export default function Game() {
     roundStream.submit({})
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roundStream])
+
+  // --- Overlay ---
+  const onOverlayDismiss = useCallback(() => {
+    setOverlayEntry(null)
+  }, [])
+
+  const onOverlayPlayAgain = useCallback(() => {
+    onPlayAgain()
+  }, [onPlayAgain])
+
+  const onBestiaryClick = useCallback((entry: BestiaryEntry) => {
+    setOverlayEntry(entry)
+  }, [])
 
   // --- Ambient mood ---
   useEffect(() => {
@@ -234,16 +270,9 @@ export default function Game() {
             </div>
           )}
 
-          {phase === 'reveal' && brewStream.object && (
-            <div className="lab-notes-container">
-              <CreatureCard
-                creature={brewStream.object}
-                isStreaming={false}
-                imageUrl={imageUrl}
-                imageLoading={imageLoading}
-                fieldLogNumber={fieldLogNumber}
-                selections={selections}
-              />
+          {phase === 'reveal' && (
+            <div className="lab-notes-container reveal-idle">
+              <p className="lab-placeholder">Specimen archived. Check the bestiary below.</p>
             </div>
           )}
 
@@ -300,9 +329,21 @@ export default function Game() {
         </div>
 
         {bestiary.length > 0 && (
-          <Bestiary creatures={bestiary} />
+          <Bestiary
+            entries={bestiary}
+            onEntryClick={phase !== 'brewing' ? onBestiaryClick : undefined}
+          />
         )}
       </div>
+
+      {overlayEntry && (
+        <DossierOverlay
+          entry={overlayEntry}
+          imageLoading={imageLoading && overlayEntry.creature === (brewStream.object as Creature | null)}
+          onDismiss={onOverlayDismiss}
+          onPlayAgain={onOverlayPlayAgain}
+        />
+      )}
     </>
   )
 }

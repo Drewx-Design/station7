@@ -70,6 +70,15 @@ export const CreatureSchema = z.object({
 
 export type Creature = z.infer<typeof CreatureSchema>
 
+// === Bestiary Entry (client-side only — bundles creature with display context) ===
+
+export type BestiaryEntry = {
+  creature: Creature
+  imageUrl: string | null
+  selections: Selections
+  fieldLogNumber: number
+}
+
 // === API Request Body Schemas (server-side validation) ===
 
 export const MicroJudgmentRequestSchema = z.object({
