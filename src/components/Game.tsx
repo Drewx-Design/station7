@@ -61,6 +61,16 @@ export default function Game() {
     }
   }, [])
 
+  // --- Generate a fresh round on first load (fallback displays immediately while API loads) ---
+  const hasInitialFetch = useRef(false)
+  useEffect(() => {
+    if (!hasInitialFetch.current) {
+      hasInitialFetch.current = true
+      roundStream.submit({})
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   // --- Round generation (useObject is fine here -- never cancelled) ---
   const roundStream = useObject({
     api: '/api/generate-round',
