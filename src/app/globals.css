@@ -36,7 +36,7 @@
   --accent-dim: rgba(45, 179, 102, 0.15);
   --accent-glow: rgba(45, 179, 102, 0.4);
 
-  /* --- typography sizes (substituted in Phase 1B) --- */
+  /* --- typography sizes --- */
   --text-headline: 1.75rem;
   --text-display: 1.375rem;
   --text-body: 1rem;
@@ -152,21 +152,21 @@ body {
 
 .field-log-id {
   font-family: var(--font-mono), 'JetBrains Mono', 'Fira Code', monospace;
-  font-size: 0.7rem;
-  letter-spacing: 0.15em;
+  font-size: var(--text-label);
+  letter-spacing: 0.18em;
   opacity: 0.5;
 }
 
 .station-id {
   font-family: var(--font-mono), 'JetBrains Mono', 'Fira Code', monospace;
-  font-size: 0.7rem;
-  letter-spacing: 0.15em;
+  font-size: var(--text-label);
+  letter-spacing: 0.18em;
   opacity: 0.3;
 }
 
 .scenario-text {
   font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
-  font-size: 1.25rem;
+  font-size: var(--text-display);
   font-weight: 400;
   line-height: 1.5;
   opacity: 0.9;
@@ -237,7 +237,7 @@ body {
   color: var(--foreground);
   cursor: pointer;
   font-family: var(--font-mono), 'JetBrains Mono', 'Fira Code', monospace;
-  font-size: 0.75rem;
+  font-size: var(--text-label);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   transition: all 0.2s ease;
@@ -271,7 +271,7 @@ body {
 }
 
 .accordion-arrow {
-  font-size: 0.6rem;
+  font-size: var(--text-label);
   opacity: 0.6;
   flex-shrink: 0;
   width: 0.75rem;
@@ -284,7 +284,7 @@ body {
 .accordion-selection {
   opacity: 0.7;
   font-family: var(--font-sans), system-ui, sans-serif;
-  font-size: 0.8rem;
+  font-size: var(--text-secondary);
   text-transform: none;
   letter-spacing: normal;
   white-space: nowrap;
@@ -372,11 +372,11 @@ body {
 .trait-card .trait-name {
   font-weight: 600;
   margin-bottom: 0.25rem;
-  font-size: 0.95rem;
+  font-size: var(--text-body);
 }
 
 .trait-card .trait-description {
-  font-size: 0.85rem;
+  font-size: var(--text-secondary);
   opacity: 0.7;
   line-height: 1.4;
 }
@@ -393,8 +393,8 @@ body {
   background: var(--surface-2);
   color: var(--foreground);
   font-family: var(--font-mono), 'JetBrains Mono', 'Fira Code', monospace;
-  font-size: 0.85rem;
-  letter-spacing: 0.15em;
+  font-size: var(--text-secondary);
+  letter-spacing: 0.18em;
   cursor: pointer;
   transition: all 0.3s ease;
   margin-top: 1rem;
@@ -439,8 +439,8 @@ body {
   background: var(--surface-3);
   color: var(--foreground);
   font-family: var(--font-mono), 'JetBrains Mono', 'Fira Code', monospace;
-  font-size: 0.85rem;
-  letter-spacing: 0.15em;
+  font-size: var(--text-secondary);
+  letter-spacing: 0.18em;
   cursor: pointer;
   transition: all 0.3s ease;
   margin-top: 1rem;
@@ -498,8 +498,8 @@ body {
 
 .lab-title {
   font-family: var(--font-mono), 'JetBrains Mono', 'Fira Code', monospace;
-  font-size: 0.7rem;
-  letter-spacing: 0.15em;
+  font-size: var(--text-label);
+  letter-spacing: 0.18em;
   opacity: 0.4;
   margin-bottom: 1.25rem;
 }
@@ -536,7 +536,7 @@ body {
 /* Instrument readout -- monospace, clinical, centered */
 .lab-reading {
   font-family: var(--font-mono), 'JetBrains Mono', 'Fira Code', monospace;
-  font-size: 0.75rem;
+  font-size: var(--text-label);
   letter-spacing: 0.05em;
   opacity: 0.7;
   text-transform: uppercase;
@@ -548,7 +548,7 @@ body {
    Two sentences pinned to a corkboard, not a dense log entry. */
 .lab-scientist-note {
   font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
-  font-size: 1.15rem;
+  font-size: var(--text-display);
   line-height: 1.9;
   text-align: center;
   padding: 1.5rem 0.5rem;
@@ -559,7 +559,7 @@ body {
 /* Prior completed notes -- dimmed, centered, stacked above current */
 .lab-prior-note {
   font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
-  font-size: 0.95rem;
+  font-size: var(--text-body);
   line-height: 1.7;
   text-align: center;
   opacity: 0.4;
@@ -617,7 +617,7 @@ body {
 
 .creature-name {
   font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
-  font-size: 1.75rem;
+  font-size: var(--text-headline);
   font-weight: 700;
   margin: 0 0 0.5rem 0;
   line-height: 1.2;
@@ -625,13 +625,13 @@ body {
 
 .creature-species {
   font-style: italic;
-  font-size: 0.9rem;
+  font-size: var(--text-secondary);
   opacity: 0.7;
   margin: 0 0 1rem 0;
 }
 
 .creature-description {
-  font-size: 0.95rem;
+  font-size: var(--text-body);
   line-height: 1.5;
   opacity: 0.85;
   margin: 0 0 1.25rem 0;
@@ -645,7 +645,7 @@ body {
 }
 
 .score-number {
-  font-size: 3rem;
+  font-size: var(--text-score);
   font-weight: 800;
   font-family: var(--font-mono), 'JetBrains Mono', 'Fira Code', monospace;
   line-height: 1;
@@ -653,13 +653,13 @@ body {
 
 .score-label {
   font-family: var(--font-mono), 'JetBrains Mono', 'Fira Code', monospace;
-  font-size: 0.7rem;
-  letter-spacing: 0.15em;
+  font-size: var(--text-label);
+  letter-spacing: 0.18em;
   opacity: 0.6;
 }
 
 .creature-narrative p {
-  font-size: 0.95rem;
+  font-size: var(--text-body);
   line-height: 1.7;
   margin: 0;
 }
@@ -677,8 +677,8 @@ body {
 
 .epitaph-label {
   font-family: var(--font-mono), 'JetBrains Mono', 'Fira Code', monospace;
-  font-size: 0.65rem;
-  letter-spacing: 0.15em;
+  font-size: var(--text-label);
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   opacity: 0.4;
   display: block;
@@ -691,7 +691,7 @@ body {
   border-left: 2px solid currentColor;
   padding-left: 1rem;
   margin: 0;
-  font-size: 1rem;
+  font-size: var(--text-body);
   line-height: 1.6;
 }
 
@@ -762,7 +762,7 @@ body {
   color: inherit;
   cursor: pointer;
   font-family: var(--font-mono), monospace;
-  font-size: 0.8rem;
+  font-size: var(--text-secondary);
   letter-spacing: 0.1em;
 }
 
@@ -782,8 +782,8 @@ body {
 
 .bestiary-title {
   font-family: var(--font-mono), 'JetBrains Mono', 'Fira Code', monospace;
-  font-size: 0.7rem;
-  letter-spacing: 0.15em;
+  font-size: var(--text-label);
+  letter-spacing: 0.18em;
   opacity: 0.4;
   margin-bottom: 1rem;
 }
@@ -843,7 +843,7 @@ body {
 
 .bestiary-score {
   font-family: var(--font-mono), 'JetBrains Mono', 'Fira Code', monospace;
-  font-size: 1.5rem;
+  font-size: var(--text-headline);
   font-weight: 800;
   line-height: 1;
   opacity: 0.8;
@@ -857,19 +857,19 @@ body {
 
 .bestiary-name {
   font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
-  font-size: 0.95rem;
+  font-size: var(--text-body);
   font-weight: 600;
   line-height: 1.2;
 }
 
 .bestiary-species {
-  font-size: 0.75rem;
+  font-size: var(--text-label);
   font-style: italic;
   opacity: 0.5;
 }
 
 .bestiary-epitaph {
-  font-size: 0.8rem;
+  font-size: var(--text-secondary);
   font-style: italic;
   line-height: 1.4;
   opacity: 0.6;
