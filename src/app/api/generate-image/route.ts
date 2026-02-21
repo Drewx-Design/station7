@@ -22,6 +22,11 @@ export async function POST(req: Request) {
 
   const safePrompt = sanitizePromptInput(parsed.data.image_prompt, 2000)
 
+  // Style anchor: ensures the image model produces creature illustrations, not stock photos
+  const stylePrefix = `You are a xenobiology field illustrator. Generate a creature illustration — NOT a photograph, NOT photorealistic. Style: detailed biological creature concept art with a painted/illustrated aesthetic. The creature described below should be the central and ONLY subject, depicted against a simple background. Focus on accurate creature anatomy matching the description.\n\n`
+  const colorContext = `Color palette: ${parsed.data.color_palette.join(', ')}. Mood: ${parsed.data.verdict}.\n\n`
+  const fullPrompt = stylePrefix + colorContext + safePrompt
+
   try {
     const controller = new AbortController()
     const timeout = setTimeout(() => controller.abort(), 30000)
@@ -35,7 +40,7 @@ export async function POST(req: Request) {
       },
       body: JSON.stringify({
         model: IMAGE_MODEL,
-        messages: [{ role: 'user', content: safePrompt }],
+        messages: [{ role: 'user', content: fullPrompt }],
         modalities: ['image', 'text'],
       }),
     })

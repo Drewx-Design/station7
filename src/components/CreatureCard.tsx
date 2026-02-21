@@ -22,13 +22,14 @@ const WATERMARK_TEXT: Record<string, string> = {
   catastrophic: 'INCIDENT REPORT',
 }
 
-export function CreatureCard({ creature, isStreaming, imageUrl, imageLoading, fieldLogNumber, selections }: {
+export function CreatureCard({ creature, isStreaming, imageUrl, imageLoading, fieldLogNumber, selections, titleId }: {
   creature: DeepPartial<Creature>
   isStreaming: boolean
   imageUrl?: string | null
   imageLoading?: boolean
   fieldLogNumber?: number
   selections?: Selections
+  titleId?: string
 }) {
   const verdict = creature.verdict ?? 'marginal'
   const score = creature.viability_score
@@ -125,7 +126,7 @@ export function CreatureCard({ creature, isStreaming, imageUrl, imageLoading, fi
 
       {/* NAME */}
       {creature.name && (
-        <h1 className="creature-name field-appear field-delay-1">{creature.name}</h1>
+        <h1 id={titleId} className="creature-name field-appear field-delay-1">{creature.name}</h1>
       )}
 
       {/* SPECIES */}
