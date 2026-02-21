@@ -8,26 +8,26 @@
 @property --mood-color {
   syntax: "<color>";
   inherits: true;
-  initial-value: #0f2e1f;
+  initial-value: #0a1f14;
 }
 
 /* === DESIGN TOKENS === */
 :root {
-  /* --- base colors (dark slate with green undertone) --- */
-  --background: #0a0f0d;
-  --foreground: #d0ddd6;
+  /* --- base colors (dark charcoal) --- */
+  --background: #121518;
+  --foreground: #d4d8dc;
 
-  /* --- surfaces (green-tinted transparent, mood bleeds through) --- */
-  --surface-1: rgba(45, 179, 102, 0.04);
-  --surface-2: rgba(45, 179, 102, 0.07);
-  --surface-3: rgba(45, 179, 102, 0.12);
-  --surface-4: rgba(45, 179, 102, 0.20);
+  /* --- surfaces (neutral, mood bleeds through) --- */
+  --surface-1: rgba(255, 255, 255, 0.025);
+  --surface-2: rgba(255, 255, 255, 0.05);
+  --surface-3: rgba(255, 255, 255, 0.08);
+  --surface-4: rgba(255, 255, 255, 0.15);
 
-  /* --- borders (green-tinted for terminal aesthetic) --- */
-  --border-rest: rgba(45, 179, 102, 0.12);
-  --border-subtle: rgba(45, 179, 102, 0.22);
-  --border-hover: rgba(45, 179, 102, 0.40);
-  --border-active: rgba(45, 179, 102, 0.60);
+  /* --- borders (neutral gray) --- */
+  --border-rest: rgba(255, 255, 255, 0.08);
+  --border-subtle: rgba(255, 255, 255, 0.15);
+  --border-hover: rgba(255, 255, 255, 0.25);
+  --border-active: rgba(255, 255, 255, 0.40);
 
   /* --- accent (terminal green) --- */
   --accent: #2db366;
@@ -55,7 +55,7 @@
 
   /* --- depth (inset shadows for materiality) --- */
   --shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.4);
-  --shadow-bevel: inset 0 1px 0 rgba(45, 179, 102, 0.15);
+  --shadow-bevel: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 
   /* fallback for browsers without color-mix() */
   --shadow-glow-mood: 0 0 12px rgba(45, 179, 102, 0.2);
@@ -64,7 +64,7 @@
 
 @supports (color: color-mix(in srgb, red 50%, blue)) {
   :root {
-    --shadow-glow-mood: 0 0 12px color-mix(in srgb, var(--mood-color, #0f2e1f) 30%, transparent);
+    --shadow-glow-mood: 0 0 12px color-mix(in srgb, var(--mood-color, #0a1f14) 30%, transparent);
   }
 }
 
@@ -102,7 +102,7 @@ body {
 .mood-layer {
   position: fixed;
   inset: 0;
-  background: radial-gradient(ellipse at 50% 30%, var(--mood-color, #0f2e1f), var(--background));
+  background: radial-gradient(ellipse at 50% 30%, var(--mood-color, #0a1f14), var(--background));
   transition: --mood-color 0.8s ease-out;
   z-index: -1;
 }
@@ -164,7 +164,7 @@ body {
   font-size: var(--text-label);
   line-height: 1rem; /* 16px */
   letter-spacing: 0.18em;
-  color: rgba(45, 179, 102, 0.45);
+  opacity: 0.4;
 }
 
 .scenario-text {
@@ -197,7 +197,7 @@ body {
   bottom: 0;
   display: block;
   height: 2rem;
-  background: linear-gradient(to top, var(--mood-color, #0f2e1f), transparent);
+  background: linear-gradient(to top, var(--mood-color, #0a1f14), transparent);
   pointer-events: none;
 }
 
@@ -287,6 +287,7 @@ body {
 }
 
 .accordion-selection {
+  color: var(--foreground);
   opacity: 0.7;
   font-family: var(--font-sans), system-ui, sans-serif;
   font-size: var(--text-secondary);
@@ -348,7 +349,7 @@ body {
 }
 
 .trait-card[data-selected="true"] {
-  border-color: var(--mood-color, #0f2e1f);
+  border-color: var(--mood-color, #0a1f14);
   background: var(--surface-3);
   box-shadow: var(--shadow-bevel);
 }
@@ -366,7 +367,7 @@ body {
 
 @supports (color: color-mix(in srgb, red 50%, blue)) {
   .trait-card[data-selected="true"]::after {
-    box-shadow: 0 0 20px color-mix(in srgb, var(--mood-color, #0f2e1f) 50%, transparent);
+    box-shadow: 0 0 20px color-mix(in srgb, var(--mood-color, #0a1f14) 50%, transparent);
   }
 }
 
@@ -433,7 +434,7 @@ body {
 @supports (color: color-mix(in srgb, red 50%, blue)) {
   @keyframes brewReadyPulse {
     0%, 100% { box-shadow: 0 0 8px rgba(45, 179, 102, 0.15); }
-    50% { box-shadow: 0 0 20px color-mix(in srgb, var(--mood-color, #0f2e1f) 40%, transparent); }
+    50% { box-shadow: 0 0 20px color-mix(in srgb, var(--mood-color, #0a1f14) 40%, transparent); }
   }
 }
 
