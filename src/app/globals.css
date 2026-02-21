@@ -104,8 +104,14 @@ body {
   inset: 0;
   overflow: hidden;
   z-index: -1;
-  background: var(--mood-color, #1a2a3a);
+  background: var(--background);
   transition: background 1.2s ease-out, opacity 0.8s ease-out;
+}
+
+@supports (color: color-mix(in srgb, red 50%, blue)) {
+  .mood-background {
+    background: color-mix(in srgb, var(--mood-color, #1a2a3a) 15%, var(--background));
+  }
 }
 
 /* Phase-aware dimming -- brew/reveal let creature card dominate */

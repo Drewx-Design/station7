@@ -29,6 +29,7 @@ export default function Game() {
   const [bestiary, setBestiary] = useState<BestiaryEntry[]>([])
   const [overlayEntry, setOverlayEntry] = useState<BestiaryEntry | null>(null)
   const [committedMotion, setCommittedMotion] = useState<MotionState>('resolved')
+  const [swapCount, setSwapCount] = useState(0)
 
   // Image generation state
   const [imageLoading, setImageLoading] = useState(false)
@@ -67,6 +68,12 @@ export default function Game() {
 
   // --- Trait selection handler ---
   const onTraitSelect = useCallback((category: keyof Selections, trait: Trait) => {
+    // Track swaps (re-selections in already-filled categories) for mood activation
+    const currentTrait = selectionsRef.current[category]
+    if (currentTrait && currentTrait.name !== trait.name) {
+      setSwapCount(prev => prev + 1)
+    }
+
     // 1. Terminate previous turn atomically
     // wasActive = true means a stream was in-flight (not just debounce-pending).
     // LabNotes handles frozen text display via onInterrupt callback separately.
@@ -188,6 +195,7 @@ export default function Game() {
     setSelections({ form: null, feature: null, ability: null, flaw: null })
     memory.clear()
     setCommittedMotion('resolved')
+    setSwapCount(0)
     setBrewError(false)
     setPhase('loading')
     roundStream.submit({})
@@ -207,14 +215,14 @@ export default function Game() {
     setOverlayEntry(entry)
   }, [])
 
-  // --- Ambient mood ---
+  // --- Ambient mood (activates after first trait swap) ---
   useEffect(() => {
     const primaryColor = judgment.labState?.orb_colors?.[0]
-    if (primaryColor && /^#[0-9a-fA-F]{6}$/.test(primaryColor)) {
+    if (swapCount >= 1 && primaryColor && /^#[0-9a-fA-F]{6}$/.test(primaryColor)) {
       document.documentElement.style.setProperty('--mood-color', primaryColor)
     }
     return () => { document.documentElement.style.removeProperty('--mood-color') }
-  }, [judgment.labState?.orb_colors])
+  }, [judgment.labState?.orb_colors, swapCount])
 
   // Commit motion state only when fully valid (prevents partial-streaming remounts)
   useEffect(() => {
