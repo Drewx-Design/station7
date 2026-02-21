@@ -187,7 +187,7 @@ export default function Game() {
 
   // --- Play Again ---
   const onPlayAgain = useCallback(() => {
-    judgment.cancelTurn()  // ignore return — full reset
+    judgment.cancelTurn(true)  // hard reset — clear gauge display
     imageAbortRef.current?.abort()
     setImageLoading(false)
     setOverlayEntry(null)

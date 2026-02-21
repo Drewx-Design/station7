@@ -113,7 +113,7 @@ export function useMicroJudgment(
   // Atomic turn cancellation: abort stream + clear display + return last state
   // Returns wasActive so callers can detect whether a stream was in-flight
   // (vs. idle or debounce-pending). Used for interruption counting.
-  const cancelTurn = useCallback((): { lastState: Partial<MicroJudgment> | null; wasActive: boolean } => {
+  const cancelTurn = useCallback((hard?: boolean): { lastState: Partial<MicroJudgment> | null; wasActive: boolean } => {
     // 1. Capture stream-active state BEFORE reset
     const wasActive = labLoadingRef.current
 
@@ -126,12 +126,15 @@ export function useMicroJudgment(
       debounceRef.current = null
     }
 
-    // 4. Capture last state before clearing (synchronous ref read)
+    // 4. Capture last state (synchronous ref read)
     const lastState = labStateRef.current
 
-    // 5. Clear display + refs
-    setLabState(null)
-    labStateRef.current = null
+    // 5. Soft cancel: keep labState visible until new stream overwrites it
+    //    Hard cancel: fully clear (used by play-again reset)
+    if (hard) {
+      setLabState(null)
+      labStateRef.current = null
+    }
     setLabLoading(false)
     labLoadingRef.current = false
 
