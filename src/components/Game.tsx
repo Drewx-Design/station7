@@ -8,6 +8,7 @@ import { SiteHeader, ScenarioBar } from './ScenarioBar'
 import { TraitAccordion } from './TraitAccordion'
 import { LabNotes } from './LabNotes'
 import { CreatureCard } from './CreatureCard'
+import { SelectionSummary } from './SelectionSummary'
 import { Bestiary } from './Bestiary'
 import { MoodBackground } from './MoodBackground'
 import { useScientistMemory } from '@/hooks/useScientistMemory'
@@ -26,6 +27,11 @@ export default function Game() {
   useEffect(() => { setFieldLogNumber(Math.floor(Math.random() * 200) + 30) }, [])
   const [bestiary, setBestiary] = useState<Creature[]>([])
   const [committedMotion, setCommittedMotion] = useState<MotionState>('resolved')
+
+  // Image generation state
+  const [imageUrl, setImageUrl] = useState<string | null>(null)
+  const [imageLoading, setImageLoading] = useState(false)
+  const imageAbortRef = useRef<AbortController | null>(null)
 
   const selectionsRef = useRef(selections)
   useEffect(() => { selectionsRef.current = selections }, [selections])
@@ -76,6 +82,28 @@ export default function Game() {
         setPhase('reveal')
         setFieldLogNumber(n => n + 1)
         setBestiary(prev => [...prev, object as Creature].slice(-20))
+
+        // Trigger image generation (progressive enhancement)
+        if (object.image_prompt) {
+          setImageLoading(true)
+          imageAbortRef.current = new AbortController()
+          fetch('/api/generate-image', {
+            method: 'POST',
+            signal: imageAbortRef.current.signal,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              image_prompt: object.image_prompt,
+              color_palette: object.color_palette,
+              verdict: object.verdict,
+            }),
+          })
+            .then(res => res.json())
+            .then(data => {
+              if (data.imageUrl) setImageUrl(data.imageUrl)
+            })
+            .catch(() => {}) // Silent failure — image is progressive enhancement
+            .finally(() => setImageLoading(false))
+        }
       }
     },
     onError() {
@@ -100,6 +128,9 @@ export default function Game() {
   const onPlayAgain = useCallback(() => {
     judgment.abort()
     judgment.reset()
+    imageAbortRef.current?.abort()
+    setImageUrl(null)
+    setImageLoading(false)
     setSelections({ form: null, feature: null, ability: null, flaw: null })
     memory.clear()
     setCommittedMotion('resolved')
@@ -178,6 +209,10 @@ export default function Game() {
               <CreatureCard
                 creature={brewStream.object}
                 isStreaming={false}
+                imageUrl={imageUrl}
+                imageLoading={imageLoading}
+                fieldLogNumber={fieldLogNumber}
+                selections={selections}
               />
             </div>
           )}
@@ -190,19 +225,30 @@ export default function Game() {
           )}
         </div>
 
-        {(phase === 'drafting' || phase === 'reveal' || phase === 'brewing') && (
-          <TraitAccordion
-            round={round}
-            selections={selections}
-            onSelect={onTraitSelect}
-            disabled={phase !== 'drafting'}
-          />
-        )}
+        {phase === 'reveal' ? (
+          <>
+            <SelectionSummary selections={selections} />
+            <button className="play-again-button" onClick={onPlayAgain}>
+              NEW SPECIMEN
+            </button>
+          </>
+        ) : (
+          <>
+            {(phase === 'drafting' || phase === 'brewing') && (
+              <TraitAccordion
+                round={round}
+                selections={selections}
+                onSelect={onTraitSelect}
+                disabled={phase !== 'drafting'}
+              />
+            )}
 
-        {phase === 'loading' && (
-          <div className="loading-state">
-            <p>Generating specimens...</p>
-          </div>
+            {phase === 'loading' && (
+              <div className="loading-state">
+                <p>Generating specimens...</p>
+              </div>
+            )}
+          </>
         )}
 
         <div className="brew-status" aria-live="polite">
@@ -219,12 +265,6 @@ export default function Game() {
           {phase === 'brewing' && (
             <button className="brew-button brewing" disabled>
               SYNTHESIZING...
-            </button>
-          )}
-
-          {phase === 'reveal' && (
-            <button className="play-again-button" onClick={onPlayAgain}>
-              NEW SPECIMEN
             </button>
           )}
         </div>

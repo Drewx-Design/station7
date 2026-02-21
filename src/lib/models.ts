@@ -3,3 +3,4 @@
 export const SONNET_MODEL = 'claude-sonnet-4-6'          // Confirmed Feb 17, 2026
 export const BREW_MODEL = 'claude-sonnet-4-6'            // Start with Sonnet; switch to 'claude-opus-4-6' if quality insufficient
 // Fallback if Sonnet 4.6 has issues: 'claude-sonnet-4-5-20250929' (NOT 20250514)
+export const IMAGE_MODEL = 'google/gemini-2.5-flash-image' // Nano Banana via OpenRouter

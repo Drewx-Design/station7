@@ -55,12 +55,13 @@ export const CreatureSchema = z.object({
   name: z.string().describe('Creature name with epithet, e.g. "Gelathrax the Reluctant"'),
   species: z.string().describe('Fake taxonomic classification with parenthetical, e.g. "Mucoid Narcoleptic (Tenured)"'),
   description: z.string().describe('Maximum 12 words combining all four traits. Spec sheet, not prose.'),
-  viability_score: z.number().describe('Integer 0-100. MUST be between 0 and 100. 0-29 catastrophic, 30-69 mediocre, 70-100 triumphant'),
-  verdict: z.enum(['triumphant', 'mediocre', 'catastrophic']),
+  viability_score: z.number().describe('Integer 0-100. MUST be between 0 and 100. 0-29 catastrophic, 30-69 marginal, 70-100 triumphant'),
+  verdict: z.enum(['triumphant', 'marginal', 'catastrophic']),
   narrative: z.string().describe('Maximum 3 sentences: the creature attempts the scenario. Field report tone. Builds to the epitaph.'),
   epitaph: z.string().describe('1-2 sentences. Current status. The screenshot moment. Lands like a punchline, reads like a clinical note.'),
   personality: z.string().describe('One word: the creature dominant emotional state'),
   color_palette: z.array(z.string()).describe('Three hex colors representing the creature vibe. Exactly 3 colors.'),
+  image_prompt: z.string().optional().describe('Vivid visual description for an AI image generator. Include creature form, features, emotional state, environment, and color palette tones.'),
 })
 
 export type Creature = z.infer<typeof CreatureSchema>
@@ -80,4 +81,12 @@ export const BrewRequestSchema = z.object({
   selections: z.record(z.string(), TraitSchema),
   accumulatedNotes: z.array(z.string().max(500)).max(10).optional().default([]),
   moodTrajectory: z.array(z.string().max(100)).max(10).optional().default([]),
+})
+
+// === Image Generation ===
+
+export const ImageRequestSchema = z.object({
+  image_prompt: z.string().min(1).max(2000),
+  color_palette: z.array(z.string()).length(3),
+  verdict: z.enum(['triumphant', 'marginal', 'catastrophic']),
 })
