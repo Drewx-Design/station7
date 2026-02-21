@@ -757,23 +757,23 @@ body {
   }
 }
 
-/* Scientist note -- typed live by the scientist. Left-aligned, large,
+/* Scientist note -- typed live by the scientist. Left-aligned,
    characters drip in via typewriter effect. */
 .lab-scientist-note {
   font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
-  font-size: var(--text-display);
-  line-height: 2.25rem; /* 36px -- 1.63× ratio */
+  font-size: var(--text-body);
+  line-height: 1.5;
   text-align: left;
-  padding: var(--space-3) var(--space-1);
+  padding: var(--space-1) var(--space-1);
   max-width: 480px;
   margin: 0;
 }
 
-/* Prior completed notes -- same treatment as current, slightly dimmed. Chat log. */
+/* Prior completed notes -- same size as current, slightly faded. Chat log. */
 .lab-prior-note {
   font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
   font-size: var(--text-body);
-  line-height: 1.5; /* 24px */
+  line-height: 1.5;
   text-align: left;
   opacity: 0.55;
   padding: var(--space-1) var(--space-1);

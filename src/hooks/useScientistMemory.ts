@@ -17,16 +17,18 @@ export function useScientistMemory() {
   const addNote = (text: string, interrupted = false) =>
     setAccumulatedNotes(prev => [...prev, { text, interrupted }])
 
-  // Replace the last note with a frozen fragment if it's the full version
-  // of what the typewriter was dripping. Handles the case where the stream
-  // completed (full note added via onNoteAccumulated) but the typewriter
-  // was still rendering when the user interrupted.
+  // Replace a completed note with its frozen typewriter fragment.
+  // Scans backwards — the matching full note may not be the very last entry
+  // if another state update slipped in between addNote and this call.
   const replaceLastNote = (text: string) =>
     setAccumulatedNotes(prev => {
-      const last = prev[prev.length - 1]
-      if (last && !last.interrupted && last.text.startsWith(text)) {
-        return [...prev.slice(0, -1), { text, interrupted: true }]
+      for (let i = prev.length - 1; i >= 0; i--) {
+        if (!prev[i].interrupted && prev[i].text.startsWith(text)) {
+          return [...prev.slice(0, i), { text, interrupted: true }, ...prev.slice(i + 1)]
+        }
       }
+      // No matching full note — add fragment, but guard against exact dupes
+      if (prev.some(n => n.text === text)) return prev
       return [...prev, { text, interrupted: true }]
     })
 
