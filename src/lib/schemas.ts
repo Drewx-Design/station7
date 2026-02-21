@@ -14,9 +14,9 @@ export type Trait = z.infer<typeof TraitSchema>
 export const RoundSchema = z.object({
   scenario: z.string().describe('The absurd human scenario the creature must survive'),
   traits: z.object({
-    form: z.array(TraitSchema).describe('6 core body/shape/material traits'),
-    feature: z.array(TraitSchema).describe('6 physical detail/appendage traits'),
-    ability: z.array(TraitSchema).describe('6 mental/sensory/supernatural traits'),
+    form: z.array(TraitSchema).describe('4 core body/shape/material traits'),
+    feature: z.array(TraitSchema).describe('4 physical detail/appendage traits'),
+    ability: z.array(TraitSchema).describe('4 mental/sensory/supernatural traits'),
     flaw: z.array(TraitSchema).describe('4 mandatory weakness traits'),
   }),
 })

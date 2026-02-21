@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import type { Trait, Round } from '@/lib/schemas'
 import { TraitCard } from './TraitCard'
 
@@ -24,24 +25,55 @@ export function TraitGrid({ round, selections, onSelect, disabled }: {
   disabled: boolean
 }) {
   const categories = Object.keys(CATEGORY_LABELS) as (keyof Selections)[]
+  const [openCategory, setOpenCategory] = useState<keyof Selections | null>('form')
+
+  const toggle = (category: keyof Selections) => {
+    setOpenCategory(prev => prev === category ? null : category)
+  }
 
   return (
-    <div className="trait-categories">
-      {categories.map(category => (
-        <div key={category} className="trait-category">
-          <h3>{CATEGORY_LABELS[category]}</h3>
-          <div className="trait-grid">
-            {round.traits[category].map((trait) => (
-              <TraitCard
-                key={trait.name}
-                trait={trait}
-                selected={selections[category]?.name === trait.name}
-                onClick={() => !disabled && onSelect(category, trait)}
-              />
-            ))}
+    <div className="trait-accordion">
+      {categories.map(category => {
+        const isOpen = openCategory === category
+        const selected = selections[category]
+
+        return (
+          <div key={category} className="accordion-category">
+            <h3>
+              <button
+                className="accordion-header"
+                aria-expanded={isOpen}
+                data-has-selection={!!selected}
+                onClick={() => toggle(category)}
+                disabled={disabled}
+                type="button"
+              >
+                <span className="accordion-arrow">{isOpen ? '▼' : '▶'}</span>
+                <span className="accordion-label">{CATEGORY_LABELS[category]}</span>
+                {selected && <span className="accordion-selection">{selected.name}</span>}
+              </button>
+            </h3>
+            <div className="accordion-panel" data-expanded={isOpen}>
+              <div className="accordion-panel-inner">
+                <div className="trait-grid">
+                  {round.traits[category].map((trait) => (
+                    <TraitCard
+                      key={trait.name}
+                      trait={trait}
+                      selected={selections[category]?.name === trait.name}
+                      onClick={() => {
+                        if (!disabled) {
+                          onSelect(category, trait)
+                        }
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      ))}
+        )
+      })}
     </div>
   )
 }

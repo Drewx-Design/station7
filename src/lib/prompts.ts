@@ -10,9 +10,9 @@ A mundane human situation that a creature must survive or accomplish. Specific, 
 Examples: "survive a 3-hour road trip as the backseat passenger with two toddlers," "deliver a TED talk on blockchain to an audience that just wants lunch," "work the front desk at a busy hotel for a full shift."
 
 THE TRAITS:
-- FORM (exactly 6): Core body, shape, material, size. Physical identity.
-- FEATURE (exactly 6): Physical details, appendages, surface qualities.
-- ABILITY (exactly 6): Mental, sensory, supernatural, or absurdly specific skills.
+- FORM (exactly 4): Core body, shape, material, size. Physical identity.
+- FEATURE (exactly 4): Physical details, appendages, surface qualities.
+- ABILITY (exactly 4): Mental, sensory, supernatural, or absurdly specific skills.
 - FLAW (exactly 4): Mandatory weaknesses. Fewer options -- you discover your weakness.
 
 TRAIT WRITING RULES:
