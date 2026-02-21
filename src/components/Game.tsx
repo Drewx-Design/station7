@@ -10,6 +10,7 @@ import { LabNotes } from './LabNotes'
 import { CreatureCard } from './CreatureCard'
 import { SelectionSummary } from './SelectionSummary'
 import { Bestiary } from './Bestiary'
+import { InstrumentStrip } from './InstrumentStrip'
 import { MoodBackground } from './MoodBackground'
 import { useScientistMemory } from '@/hooks/useScientistMemory'
 import { useMicroJudgment } from '@/hooks/useMicroJudgment'
@@ -214,8 +215,12 @@ export default function Game() {
                 isLoading={judgment.labLoading}
                 judgmentKey={judgment.judgmentKey}
                 priorNotes={memory.accumulatedNotes}
-                brewReady={brewReady}
                 onInterrupt={onInterrupt}
+              />
+              <InstrumentStrip
+                reading={judgment.labState?.reading}
+                brewReady={brewReady}
+                judgmentKey={judgment.judgmentKey}
               />
             </div>
           )}

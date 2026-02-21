@@ -120,12 +120,11 @@ function useTypewriterSound(isMuted: boolean) {
   return { playKeystroke }
 }
 
-export function LabNotes({ labState, isLoading, judgmentKey, priorNotes, brewReady, onInterrupt }: {
+export function LabNotes({ labState, isLoading, judgmentKey, priorNotes, onInterrupt }: {
   labState: PartialJudgment | null
   isLoading: boolean
   judgmentKey: number
   priorNotes: NoteEntry[]
-  brewReady: boolean
   onInterrupt: (frozenText: string) => void
 }) {
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -226,15 +225,6 @@ export function LabNotes({ labState, isLoading, judgmentKey, priorNotes, brewRea
             {note.text}
           </div>
         ))}
-
-        {/* Instrument readout — ALL CAPS, monospace */}
-        {labState?.reading && (
-          <div className="lab-reading note-enter" key={`reading-${judgmentKey}`}>
-            {brewReady
-              ? 'SYNTHESIS AUTHORIZED | INITIATING BREW SEQUENCE'
-              : labState.reading}
-          </div>
-        )}
 
         {/* Current scientist note — typewriter character drip */}
         {showCurrentNote && (

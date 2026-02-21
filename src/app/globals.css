@@ -366,6 +366,15 @@ body {
   .creature-image-area {
     max-height: 40vh;
   }
+
+  .instrument-strip {
+    flex-wrap: wrap;
+    min-height: auto;
+  }
+  .gauge-segment {
+    flex: 1 1 45%;
+    min-width: 120px;
+  }
 }
 
 /* ============================================
@@ -737,17 +746,6 @@ body {
   }
 }
 
-/* Instrument readout -- monospace, clinical, centered */
-.lab-reading {
-  font-family: var(--font-mono), 'JetBrains Mono', 'Fira Code', monospace;
-  font-size: var(--text-label);
-  letter-spacing: 0.05em;
-  color: var(--accent);
-  text-transform: uppercase;
-  text-align: center;
-  margin-bottom: var(--space-2);
-}
-
 /* Scientist note -- typed live by the scientist. Left-aligned, large,
    characters drip in via typewriter effect. */
 .lab-scientist-note {
@@ -807,7 +805,7 @@ body {
 
 .mute-toggle {
   position: absolute;
-  bottom: 0.75rem;
+  top: 0.75rem;
   right: 0.75rem;
   z-index: 2;
   width: 32px;
@@ -844,6 +842,91 @@ body {
     animation: none;
     opacity: 0.4;
   }
+}
+
+/* ============================================
+   INSTRUMENT STRIP -- Gauge readouts footer
+   ============================================ */
+
+.instrument-strip {
+  display: flex;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  border-top: 1px solid var(--border-rest);
+  min-height: 40px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.instrument-strip[data-brew-ready] {
+  justify-content: center;
+}
+
+.gauge-segment {
+  flex: 1;
+  min-width: 0;
+  animation: gaugeAppear 0.3s ease-out both;
+}
+
+.gauge-label {
+  font-family: var(--font-mono), 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: var(--text-label);
+  letter-spacing: 0.05em;
+  color: var(--color-label);
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gauge-value {
+  font-family: var(--font-mono), 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: var(--text-label);
+  color: var(--accent);
+}
+
+.gauge-bar {
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.08);
+  margin-top: 4px;
+  overflow: hidden;
+}
+
+.gauge-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: rgba(45, 179, 102, 0.6);
+  transition: width 0.4s ease-out;
+  min-width: 4px;
+}
+
+@supports (color: color-mix(in srgb, red 50%, blue)) {
+  .gauge-fill {
+    background: color-mix(in srgb, var(--mood-color) 60%, transparent);
+  }
+}
+
+.gauge-chip {
+  font-family: var(--font-mono), 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: var(--text-label);
+  letter-spacing: 0.05em;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+.brew-authorized {
+  font-family: var(--font-mono), 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: var(--text-label);
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  text-transform: uppercase;
+  animation: brewReadyPulse 2s ease-in-out infinite;
+}
+
+@keyframes gaugeAppear {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* ============================================
@@ -1451,5 +1534,18 @@ body {
   }
   .score-block {
     transition: none;
+  }
+
+  /* Instrument strip: static gauges */
+  .gauge-segment {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .gauge-fill {
+    transition: none;
+  }
+  .brew-authorized {
+    animation: none;
   }
 }
