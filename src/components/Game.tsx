@@ -143,6 +143,7 @@ export default function Game() {
         <ScenarioBar
           scenario={phase === 'loading' ? 'Station 7 is preparing your assignment...' : round.scenario}
           fieldLogNumber={fieldLogNumber}
+          phase={phase}
         />
 
         <div className="trait-column" data-phase={phase}>
@@ -162,6 +163,30 @@ export default function Game() {
               <p>Generating specimens...</p>
             </div>
           )}
+
+          <div className="brew-status" aria-live="polite">
+            {phase === 'drafting' && (
+              <button
+                className={`brew-button ${brewReady ? 'brew-ready-pulse' : ''}`}
+                disabled={!allSelected}
+                onClick={onBrew}
+              >
+                {allSelected ? 'READY TO BREW' : `AWAITING ${4 - selectedCount} MORE ${4 - selectedCount === 1 ? 'SELECTION' : 'SELECTIONS'}`}
+              </button>
+            )}
+
+            {phase === 'brewing' && (
+              <button className="brew-button brewing" disabled>
+                SYNTHESIZING...
+              </button>
+            )}
+
+            {phase === 'reveal' && (
+              <button className="play-again-button" onClick={onPlayAgain}>
+                NEW SPECIMEN
+              </button>
+            )}
+          </div>
         </div>
 
         <div className="lab-column">
@@ -206,28 +231,6 @@ export default function Game() {
               <p>Station 7 containment anomaly.</p>
               <button onClick={onBrew}>Retry</button>
             </div>
-          )}
-
-          {phase === 'drafting' && (
-            <button
-              className={`brew-button ${brewReady ? 'brew-ready-pulse' : ''}`}
-              disabled={!allSelected}
-              onClick={onBrew}
-            >
-              {allSelected ? 'BREW SPECIMEN' : `SELECT ${4 - selectedCount} MORE`}
-            </button>
-          )}
-
-          {phase === 'brewing' && (
-            <button className="brew-button brewing" disabled>
-              SYNTHESIZING...
-            </button>
-          )}
-
-          {phase === 'reveal' && (
-            <button className="play-again-button" onClick={onPlayAgain}>
-              NEW SPECIMEN
-            </button>
           )}
         </div>
 

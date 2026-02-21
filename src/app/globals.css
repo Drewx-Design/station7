@@ -247,24 +247,39 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: auto 1fr;
-  gap: var(--space-4);      /* 32px -- between columns */
+  gap: var(--space-2);      /* 16px -- tightened for instrument-panel density */
   min-height: 100vh;
-  padding: var(--space-5);  /* 40px -- outer frame breathing room */
+  padding: var(--space-3);  /* 24px -- compact outer frame */
   max-width: 1400px;
   margin: 0 auto;
   position: relative;
 }
 
-/* Scenario bar spans full width */
+/* Scenario bar spans full width -- hero mission briefing banner */
 .scenario-bar {
   grid-column: 1 / -1;
+  background: var(--surface-1);
+  border: 1px solid var(--border-rest);
+  border-bottom: 3px solid var(--accent);
+  border-radius: 6px;
+  padding: var(--space-3);
+  box-shadow: var(--shadow-bevel), var(--shadow-inset);
+  transition: opacity 0.5s ease;
+}
+
+/* Dim scenario bar during brewing/reveal so creature card dominates */
+.scenario-bar[data-phase="brewing"] {
+  opacity: 0.5;
+}
+.scenario-bar[data-phase="reveal"] {
+  opacity: 0.4;
 }
 
 .scenario-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--space-1);
+  margin-bottom: var(--space-2);
 }
 
 .field-log-id {
@@ -283,13 +298,23 @@ body {
   opacity: 0.4;
 }
 
+.scenario-label {
+  display: block;
+  font-family: var(--font-mono), 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: var(--text-label);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-label);
+  margin-bottom: calc(var(--space-1) / 2);
+}
+
 .scenario-text {
   font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
-  font-size: var(--text-display);
+  font-size: var(--text-headline);
   font-weight: 400;
-  line-height: 2.25rem; /* 36px -- 1.63× ratio for leisurely reading */
+  line-height: 2.25rem; /* 36px */
   opacity: 0.9;
-  max-width: 640px;
+  max-width: 960px;
 }
 
 /* Left column: trait categories -- scrolls naturally */
@@ -365,7 +390,7 @@ body {
   display: flex;
   align-items: center;
   gap: var(--space-1);
-  padding: var(--space-2);
+  padding: 12px;
   border: 1px solid var(--border-rest);
   border-radius: 6px;
   background: var(--surface-1);
@@ -399,12 +424,25 @@ body {
   border-bottom-right-radius: 0;
 }
 
+/* Selected category: green accent border + tinted background = completed checklist item */
 .accordion-header[data-has-selection="true"] {
   opacity: 1;
+  border-color: var(--border-hover);
+  background: var(--accent-dim);
 }
 
+/* Checkmark on selected + collapsed headers */
+.accordion-header[data-has-selection="true"]:not([aria-expanded="true"])::after {
+  content: '\2713';
+  color: var(--accent);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* Unselected + collapsed: dim to push focus toward incomplete categories */
 .accordion-header[data-has-selection="false"]:not([aria-expanded="true"]) {
   color: rgba(45, 179, 102, 0.35);
+  opacity: 0.5;
 }
 
 .accordion-arrow {
@@ -420,7 +458,7 @@ body {
 
 .accordion-selection {
   color: var(--foreground);
-  opacity: 0.7;
+  opacity: 1;
   font-family: var(--font-sans), system-ui, sans-serif;
   font-size: var(--text-secondary);
   text-transform: none;
@@ -448,7 +486,7 @@ body {
 }
 
 .accordion-panel[data-expanded="true"] .accordion-panel-inner {
-  padding: var(--space-2) 0;
+  padding: var(--space-1) 0;
   box-shadow: var(--shadow-inset);
 }
 
@@ -459,12 +497,12 @@ body {
 .trait-grid {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2); /* 16px -- matches card padding per Law of Proximity */
+  gap: var(--space-1); /* 8px -- tightened for instrument-panel density */
 }
 
 .trait-card {
   position: relative;
-  padding: var(--space-2);
+  padding: 12px;
   border: 1px solid var(--border-subtle);
   border-radius: 8px;
   cursor: pointer;
@@ -526,9 +564,13 @@ body {
    BREW / PLAY AGAIN BUTTONS
    ============================================ */
 
+.brew-status {
+  margin-top: var(--space-2);
+}
+
 .brew-button {
   width: 100%;
-  padding: var(--space-2) var(--space-4);
+  padding: 12px var(--space-3);
   border: 1px solid var(--border-hover);
   border-radius: 8px;
   background: var(--surface-2);
@@ -539,7 +581,6 @@ body {
   cursor: pointer;
   transition: border-color 0.3s ease, background-color 0.3s ease,
               box-shadow 0.3s ease, opacity 0.3s ease;
-  margin-top: var(--space-2);
 }
 
 .brew-button:disabled {
@@ -578,7 +619,7 @@ body {
 
 .play-again-button {
   width: 100%;
-  padding: var(--space-2) var(--space-4);
+  padding: 12px var(--space-3);
   border: 1px solid var(--border-hover);
   border-radius: 8px;
   background: var(--surface-3);
@@ -589,7 +630,6 @@ body {
   cursor: pointer;
   transition: border-color 0.3s ease, background-color 0.3s ease,
               opacity 0.3s ease;
-  margin-top: var(--space-2);
   opacity: 1;
   pointer-events: auto;
   position: relative;
@@ -638,7 +678,7 @@ body {
   background: var(--surface-1);
   border: 2px solid var(--border-rest);
   border-radius: 12px;
-  padding: var(--space-3);
+  padding: var(--space-2);
   min-height: 200px;
   box-shadow: var(--shadow-bevel);
 }
