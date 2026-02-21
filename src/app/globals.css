@@ -175,7 +175,9 @@ body {
   display: flex;
   gap: 12px;
   align-items: stretch;
+  height: calc(100vh - 12rem);     /* definite height so flex children resolve scroll */
   max-height: calc(100vh - 12rem);
+  overflow: hidden;
 }
 
 /* Site header -- identity bar */
@@ -258,6 +260,8 @@ body {
   }
   .top-panels {
     flex-direction: column;
+    height: auto;
+    max-height: none;
   }
   .trait-accordion {
     grid-template-columns: 1fr;
