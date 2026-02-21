@@ -12,7 +12,7 @@ export function CreatureCard({ creature, isStreaming }: {
   creature: DeepPartial<Creature>
   isStreaming: boolean
 }) {
-  const verdict = creature.verdict ?? 'mediocre'
+  const verdict = creature.verdict ?? 'marginal'
 
   // Apply creature's color_palette to the card background when available
   const cardStyle = useMemo(() => {

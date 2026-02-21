@@ -752,6 +752,7 @@ body {
   color: #fef3c7;
 }
 
+.creature-card[data-verdict="marginal"],
 .creature-card[data-verdict="mediocre"] {
   background: linear-gradient(135deg, #f3f4f610, #e5e7eb10);
   border: 2px solid #9ca3af;
