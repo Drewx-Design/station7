@@ -257,7 +257,7 @@ body {
 
 .accordion-header:disabled {
   cursor: default;
-  opacity: 0.5;
+  color: rgba(45, 179, 102, 0.35);
 }
 
 .accordion-header[aria-expanded="true"] {
@@ -272,7 +272,7 @@ body {
 }
 
 .accordion-header[data-has-selection="false"]:not([aria-expanded="true"]) {
-  opacity: 0.5;
+  color: rgba(45, 179, 102, 0.35);
 }
 
 .accordion-arrow {
@@ -411,8 +411,9 @@ body {
 }
 
 .brew-button:disabled {
-  opacity: 0.3;
+  opacity: 0.4;
   cursor: not-allowed;
+  background: var(--surface-1);
 }
 
 .brew-button:not(:disabled):hover {
