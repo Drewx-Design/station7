@@ -803,6 +803,17 @@ body {
   animation: gaugeAppear 0.3s ease-out both;
 }
 
+.gauge-title {
+  font-family: var(--font-mono), 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: var(--text-label);
+  letter-spacing: 0.08em;
+  color: var(--color-label);
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .gauge-label {
   font-family: var(--font-mono), 'JetBrains Mono', 'Fira Code', monospace;
   font-size: var(--text-label);

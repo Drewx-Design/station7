@@ -31,22 +31,20 @@ function formatMoodSlug(slug: string): string {
   return slug.replace(/[_-]/g, ' ')
 }
 
-function GaugeSegment({ seg, segKey, skeleton }: { seg: Segment; segKey: string; skeleton?: boolean }) {
-  if (skeleton) {
-    return (
-      <div className="gauge-segment" key={segKey}>
-        <div className="gauge-label">{seg.name}</div>
+function GaugeSegment({ title, seg, segKey, skeleton }: {
+  title: string
+  seg: Segment | null
+  segKey: string
+  skeleton?: boolean
+}) {
+  return (
+    <div className="gauge-segment" key={segKey}>
+      <div className="gauge-title">{title}</div>
+      {skeleton || !seg ? (
         <div className="gauge-bar" aria-hidden="true">
           <div className="gauge-fill" style={{ width: 0 }} />
         </div>
-      </div>
-    )
-  }
-
-  return (
-    <div className="gauge-segment" key={segKey}>
-      <div className="gauge-label">{seg.name}</div>
-      {seg.percent !== null ? (
+      ) : seg.percent !== null ? (
         <>
           <div className="gauge-value">{seg.value}</div>
           <div
@@ -55,7 +53,7 @@ function GaugeSegment({ seg, segKey, skeleton }: { seg: Segment; segKey: string;
             aria-valuenow={Math.min(Math.max(seg.percent, 0), 100)}
             aria-valuemin={0}
             aria-valuemax={100}
-            aria-label={seg.name}
+            aria-label={`${title}: ${seg.name}`}
           >
             <div
               className="gauge-fill"
@@ -91,29 +89,19 @@ export function InstrumentStrip({ reading, brewReady, judgmentKey, labMood, mood
   const readingSegments = reading ? parseReading(reading).slice(0, 1) : []
   const isEmpty = !reading && !labMood
 
-  if (isEmpty) {
-    // Skeleton: always visible, pinned to bottom, shows empty gauge tracks
-    return (
-      <div className="instrument-strip" aria-live="polite" data-empty>
-        <GaugeSegment skeleton seg={{ name: 'READING', value: '', percent: null }} segKey="skeleton-0" />
-        <GaugeSegment skeleton seg={{ name: 'MOOD', value: '', percent: null }} segKey="skeleton-1" />
-      </div>
-    )
-  }
+  // Build the reading segment (null when no data yet)
+  const readingSeg: Segment | null = readingSegments[0] ?? null
 
-  // Build the reading segment
-  const readingSeg: Segment = readingSegments[0] ?? { name: '\u2014', value: '\u2014', percent: null }
-
-  // Build the mood segment
+  // Build the mood segment (null when no data yet)
   const moodPercent = moodIntensity != null ? Math.min(Math.max(Math.round(moodIntensity), 0), 100) : null
-  const moodSeg: Segment = labMood
+  const moodSeg: Segment | null = labMood
     ? { name: 'MOOD', value: `${formatMoodSlug(labMood)} ${moodPercent != null ? `${moodPercent}%` : ''}`.trim(), percent: moodPercent }
-    : { name: 'MOOD', value: '\u2014', percent: null }
+    : null
 
   return (
-    <div className="instrument-strip" aria-live="polite">
-      <GaugeSegment seg={readingSeg} segKey={`${judgmentKey}-0`} />
-      <GaugeSegment seg={moodSeg} segKey={`${judgmentKey}-mood`} />
+    <div className="instrument-strip" aria-live="polite" data-empty={isEmpty || undefined}>
+      <GaugeSegment title="READING" seg={readingSeg} skeleton={!readingSeg} segKey={isEmpty ? 'skeleton-0' : `${judgmentKey}-0`} />
+      <GaugeSegment title="MOOD" seg={moodSeg} skeleton={!moodSeg} segKey={isEmpty ? 'skeleton-1' : `${judgmentKey}-mood`} />
     </div>
   )
 }
