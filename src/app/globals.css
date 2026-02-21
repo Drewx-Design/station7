@@ -23,11 +23,11 @@
   --surface-3: rgba(255, 255, 255, 0.08);
   --surface-4: rgba(255, 255, 255, 0.15);
 
-  /* --- borders (neutral gray) --- */
+  /* --- borders (neutral at rest, green on interaction) --- */
   --border-rest: rgba(255, 255, 255, 0.08);
   --border-subtle: rgba(255, 255, 255, 0.15);
-  --border-hover: rgba(255, 255, 255, 0.25);
-  --border-active: rgba(255, 255, 255, 0.40);
+  --border-hover: rgba(45, 179, 102, 0.45);
+  --border-active: rgba(45, 179, 102, 0.70);
 
   /* --- accent (terminal green) --- */
   --accent: #2db366;
