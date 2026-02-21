@@ -146,28 +146,6 @@ export default function Game() {
               <p>Generating specimens...</p>
             </div>
           )}
-
-          {phase === 'drafting' && (
-            <button
-              className={`brew-button ${brewReady ? 'brew-ready-pulse' : ''}`}
-              disabled={!allSelected}
-              onClick={onBrew}
-            >
-              {allSelected ? 'BREW SPECIMEN' : `SELECT ${4 - selectedCount} MORE`}
-            </button>
-          )}
-
-          {phase === 'brewing' && (
-            <button className="brew-button brewing" disabled>
-              SYNTHESIZING...
-            </button>
-          )}
-
-          {phase === 'reveal' && (
-            <button className="play-again-button" onClick={onPlayAgain}>
-              NEW SPECIMEN
-            </button>
-          )}
         </div>
 
         <div className="lab-column">
@@ -212,6 +190,28 @@ export default function Game() {
               <p>Station 7 containment anomaly.</p>
               <button onClick={onBrew}>Retry</button>
             </div>
+          )}
+
+          {phase === 'drafting' && (
+            <button
+              className={`brew-button ${brewReady ? 'brew-ready-pulse' : ''}`}
+              disabled={!allSelected}
+              onClick={onBrew}
+            >
+              {allSelected ? 'BREW SPECIMEN' : `SELECT ${4 - selectedCount} MORE`}
+            </button>
+          )}
+
+          {phase === 'brewing' && (
+            <button className="brew-button brewing" disabled>
+              SYNTHESIZING...
+            </button>
+          )}
+
+          {phase === 'reveal' && (
+            <button className="play-again-button" onClick={onPlayAgain}>
+              NEW SPECIMEN
+            </button>
           )}
         </div>
 
