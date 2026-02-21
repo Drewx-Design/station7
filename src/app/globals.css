@@ -96,7 +96,7 @@ body {
 }
 
 /* ============================================
-   MOOD BACKGROUND -- Floating orb atmosphere
+   MOOD BACKGROUND -- Flat color wash + noise
    ============================================ */
 
 .mood-background {
@@ -104,8 +104,8 @@ body {
   inset: 0;
   overflow: hidden;
   z-index: -1;
-  background: var(--background);
-  transition: opacity 0.8s ease-out;
+  background: var(--mood-color, #1a2a3a);
+  transition: background 1.2s ease-out, opacity 0.8s ease-out;
 }
 
 /* Phase-aware dimming -- brew/reveal let creature card dominate */
@@ -114,129 +114,45 @@ body {
   opacity: 0.4;
 }
 
-/* --- Orb base --- */
-.mood-orb {
-  position: absolute;
-  border-radius: 50%;
-  pointer-events: none;
-  filter: blur(60px);
-  will-change: transform, opacity;
-  transition: background 0.8s ease-out, opacity 0.8s ease-out;
-}
-
-/* Third orb: hidden unless agitated */
-.mood-orb:nth-child(3) {
-  display: none;
-}
-.mood-background[data-motion="agitated"] .mood-orb:nth-child(3) {
-  display: block;
-}
-
-/* --- Orb positioning and sizing --- */
-.mood-orb:nth-child(1) {
-  width: 60vw;
-  height: 60vw;
-  left: 35%;
-  top: 35%;
-  transform: translate(-50%, -50%);
-  opacity: 0.35;
-}
-
-.mood-orb:nth-child(2) {
-  width: 50vw;
-  height: 50vw;
-  left: 65%;
-  top: 60%;
-  transform: translate(-50%, -50%);
-  opacity: 0.20;
-}
-
-.mood-orb:nth-child(3) {
-  width: 40vw;
-  height: 40vw;
-  left: 50%;
-  top: 80%;
-  transform: translate(-50%, -50%);
-  opacity: 0.15;
-}
-
-/* --- Agitated preset: fast, irregular, wide drift --- */
-.mood-background[data-motion="agitated"] .mood-orb:nth-child(1) {
-  animation: orbDriftAgitated1 8s ease-in-out infinite alternate;
-}
-.mood-background[data-motion="agitated"] .mood-orb:nth-child(2) {
-  animation: orbDriftAgitated2 11s ease-in-out infinite alternate;
-}
-.mood-background[data-motion="agitated"] .mood-orb:nth-child(3) {
-  animation: orbDriftAgitated3 14s ease-in-out infinite alternate;
-}
-
-@keyframes orbDriftAgitated1 {
-  0%   { transform: translate(-50%, -50%) translate(0, 0); }
-  33%  { transform: translate(-50%, -50%) translate(30vw, -15vh); }
-  66%  { transform: translate(-50%, -50%) translate(-21vw, 25vh); }
-  100% { transform: translate(-50%, -50%) translate(12vw, -20vh); }
-}
-
-@keyframes orbDriftAgitated2 {
-  0%   { transform: translate(-50%, -50%) translate(0, 0); }
-  40%  { transform: translate(-50%, -50%) translate(-20vw, 15vh); }
-  70%  { transform: translate(-50%, -50%) translate(25vw, -21vh); }
-  100% { transform: translate(-50%, -50%) translate(-7.5vw, 30vh); }
-}
-
-@keyframes orbDriftAgitated3 {
-  0%   { transform: translate(-50%, -50%) translate(0, 0); }
-  50%  { transform: translate(-50%, -50%) translate(18vw, 16vh); }
-  100% { transform: translate(-50%, -50%) translate(-10vw, -12vh); }
-}
-
-/* --- Curious preset: medium, searching, elliptical --- */
-.mood-background[data-motion="curious"] .mood-orb:nth-child(1) {
-  animation: orbDriftCurious1 15s ease-in-out infinite alternate;
-}
-.mood-background[data-motion="curious"] .mood-orb:nth-child(2) {
-  animation: orbDriftCurious2 18s ease-in-out infinite alternate;
-}
-
-@keyframes orbDriftCurious1 {
-  0%   { transform: translate(-50%, -50%) translate(0, 0); }
-  50%  { transform: translate(-50%, -50%) translate(15vw, -10vh); }
-  100% { transform: translate(-50%, -50%) translate(-8vw, 12vh); }
-}
-
-@keyframes orbDriftCurious2 {
-  0%   { transform: translate(-50%, -50%) translate(0, 0); }
-  50%  { transform: translate(-50%, -50%) translate(-12vw, 8vh); }
-  100% { transform: translate(-50%, -50%) translate(10vw, -6vh); }
-}
-
-/* --- Resolved preset: slow, gentle, near-static --- */
-.mood-background[data-motion="resolved"] .mood-orb:nth-child(1) {
-  animation: orbDriftResolved1 22s ease-in-out infinite alternate;
-}
-.mood-background[data-motion="resolved"] .mood-orb:nth-child(2) {
-  animation: orbDriftResolved2 28s ease-in-out infinite alternate;
-}
-
-@keyframes orbDriftResolved1 {
-  0%   { transform: translate(-50%, -50%) translate(0, 0); }
-  100% { transform: translate(-50%, -50%) translate(8vw, 6vh); }
-}
-
-@keyframes orbDriftResolved2 {
-  0%   { transform: translate(-50%, -50%) translate(0, 0); }
-  100% { transform: translate(-50%, -50%) translate(-6vw, 4vh); }
-}
-
-/* --- Noise texture overlay (above orbs) --- */
+/* --- Noise texture overlay --- */
 .mood-background::after {
   content: '';
   position: absolute;
-  inset: 0;
-  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  inset: -10px;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
   pointer-events: none;
   z-index: 1;
+  opacity: 0.03;
+  transition: opacity 0.6s ease-out;
+}
+
+/* --- Noise intensity by motion state --- */
+.mood-background[data-motion="resolved"]::after {
+  opacity: 0.03;
+}
+
+.mood-background[data-motion="curious"]::after {
+  opacity: 0.05;
+  animation: noiseJitter 0.3s steps(3) infinite;
+}
+
+.mood-background[data-motion="agitated"]::after {
+  opacity: 0.08;
+  animation: noiseJitter 0.1s steps(4) infinite;
+}
+
+@keyframes noiseJitter {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(-2px, 1px); }
+  50%  { transform: translate(1px, -2px); }
+  75%  { transform: translate(-1px, 2px); }
+  100% { transform: translate(2px, -1px); }
+}
+
+/* Suppress noise jitter during brew/reveal */
+.mood-background[data-phase="brewing"]::after,
+.mood-background[data-phase="reveal"]::after {
+  animation: none;
 }
 
 /* ============================================
@@ -338,22 +254,6 @@ body {
   }
   .trait-accordion {
     grid-template-columns: 1fr;
-  }
-
-  /* Mood orbs: reduced blur, fewer orbs, larger relative sizes */
-  .mood-orb {
-    filter: blur(40px);
-  }
-  .mood-background[data-motion="agitated"] .mood-orb:nth-child(3) {
-    display: none;
-  }
-  .mood-orb:nth-child(1) {
-    width: 80vw;
-    height: 80vw;
-  }
-  .mood-orb:nth-child(2) {
-    width: 60vw;
-    height: 60vw;
   }
 
   /* Reveal: show dossier before SelectionSummary on mobile */
@@ -1664,8 +1564,8 @@ body {
     animation-iteration-count: 1 !important;
   }
 
-  /* Mood orbs: static positions, no drift */
-  .mood-orb {
+  /* Mood background: no noise jitter */
+  .mood-background::after {
     animation: none !important;
   }
 
