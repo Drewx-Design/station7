@@ -1382,4 +1382,17 @@ body {
     opacity: 1;
     transform: none;
   }
+
+  /* Dossier: disable image pulse and fade-in */
+  .creature-image-placeholder.loading {
+    animation: none;
+    opacity: 0.4;
+  }
+  .creature-image {
+    transition: none;
+    opacity: 1;
+  }
+  .score-block {
+    transition: none;
+  }
 }
