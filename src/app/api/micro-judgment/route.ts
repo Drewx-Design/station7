@@ -62,7 +62,14 @@ Provide your updated assessment.`
     : MICRO_JUDGMENT_SYSTEM
 
   if (interruptionCount > 0) {
-    system += `\n\nINTERRUPTION CONTEXT: The subject has changed their selection ${interruptionCount} time${interruptionCount === 1 ? '' : 's'} while you were mid-observation. You were cut off. You noticed.`
+    const interruptionFlavor = interruptionCount === 1
+      ? `The subject changed their selection while you were mid-sentence. Your train of thought derailed. You are pretending it didn't bother you.`
+      : interruptionCount === 2
+      ? `The subject has now changed their mind ${interruptionCount} times while you were trying to think. Your notes have a crossed-out section. You are keeping your composure, but your handwriting is getting smaller.`
+      : interruptionCount === 3
+      ? `${interruptionCount} interruptions. You have stopped starting sentences with confidence. Your pen has left a dent in the clipboard. The professional mask is slipping and you are aware of it.`
+      : `${interruptionCount} interruptions. You have lost count. You are no longer sure which observation belongs to which version of this creature. Your field journal has margin notes that just say "again." You are speaking to yourself more than to the record.`
+    system += `\n\nINTERRUPTION CONTEXT: ${interruptionFlavor}`
   }
 
   const result = streamObject({
