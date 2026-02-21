@@ -18,13 +18,14 @@ export function TraitAccordion({ round, selections, onSelect, disabled, expanded
   selections: Selections
   onSelect: (category: keyof Selections, trait: Trait) => void
   disabled: boolean
-  expandedCategory: keyof Selections
-  onExpand: (category: keyof Selections) => void
+  expandedCategory: keyof Selections | null
+  onExpand: (category: keyof Selections | null) => void
 }) {
   const headerRefs = useRef<Record<string, HTMLButtonElement | null>>({})
 
   // Scroll newly expanded header into view after transition
   useEffect(() => {
+    if (!expandedCategory) return
     const timeout = setTimeout(() => {
       headerRefs.current[expandedCategory]?.scrollIntoView({
         behavior: 'smooth',
@@ -52,7 +53,7 @@ export function TraitAccordion({ round, selections, onSelect, disabled, expanded
                 data-has-selection={!!selection}
                 aria-expanded={isExpanded}
                 aria-controls={panelId}
-                onClick={() => !disabled && !isExpanded && onExpand(category)}
+                onClick={() => !disabled && onExpand(isExpanded ? null : category)}
                 disabled={disabled}
                 type="button"
               >

@@ -20,7 +20,7 @@ export default function Game() {
   const [selections, setSelections] = useState<Selections>({
     form: null, feature: null, ability: null, flaw: null,
   })
-  const [expandedCategory, setExpandedCategory] = useState<keyof Selections>('form')
+  const [expandedCategory, setExpandedCategory] = useState<keyof Selections | null>('form')
   const [fieldLogNumber, setFieldLogNumber] = useState(47)
   useEffect(() => { setFieldLogNumber(Math.floor(Math.random() * 200) + 30) }, [])
   const [bestiary, setBestiary] = useState<Creature[]>([])
