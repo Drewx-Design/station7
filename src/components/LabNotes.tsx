@@ -39,7 +39,7 @@ function useTypewriter(
       // it looks like a complete thought — not visually "interrupted."
       // This prevents false positives when the stream finished but the
       // typewriter was a few chars behind the final value.
-      const looksComplete = /[.!?\u2014\u2013-]$/.test(displayed.trim())
+      const looksComplete = /[.!?]$/.test(displayed.trim())
       if (wasTyping && !looksComplete && displayed.length >= 20 && mountedRef.current && onInterrupt) {
         onInterrupt(displayed)
       }

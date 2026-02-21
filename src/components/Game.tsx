@@ -56,6 +56,7 @@ export default function Game() {
   // replaces it with the fragment. If stream was mid-flight, just adds it.
   const onInterrupt = useCallback((frozenText: string) => {
     memory.replaceLastNote(frozenText)
+    memory.incrementInterruptions()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -75,10 +76,9 @@ export default function Game() {
     }
 
     // 1. Terminate previous turn atomically
-    // wasActive = true means a stream was in-flight (not just debounce-pending).
-    // LabNotes handles frozen text display via onInterrupt callback separately.
-    const { wasActive } = judgment.cancelTurn()
-    if (wasActive) memory.incrementInterruptions()
+    // LabNotes handles frozen text display and interruption counting
+    // via onInterrupt callback (fires when typewriter is mid-drip).
+    judgment.cancelTurn()
 
     // 2. Update selections
     const newSelections = { ...selectionsRef.current, [category]: trait }

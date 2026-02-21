@@ -705,6 +705,12 @@ body {
   border-bottom: 1px solid var(--border-rest);
 }
 
+/* Interrupted fragment — frozen mid-thought */
+.lab-prior-note[data-interrupted] {
+  opacity: 0.5;
+  border-bottom-style: dashed;
+}
+
 
 /* ============================================
    STREAMING CURSOR
