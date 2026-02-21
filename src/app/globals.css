@@ -181,8 +181,7 @@ body {
   display: flex;
   gap: 12px;
   align-items: stretch;
-  height: calc(100vh - 12rem);     /* definite height so flex children resolve scroll */
-  max-height: calc(100vh - 12rem);
+  height: 30vh;
   overflow: hidden;
 }
 
@@ -629,8 +628,8 @@ body {
   border-left: 2px solid var(--accent);
   border-radius: 12px;
   padding: var(--space-2);
-  min-height: 200px;
-  max-height: calc(100vh - 8rem);
+  min-height: 0;
+  max-height: 100%;
   overflow: hidden;
   box-shadow: var(--shadow-bevel);
 }
