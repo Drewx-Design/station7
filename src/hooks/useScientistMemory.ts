@@ -4,12 +4,15 @@ import type { NoteEntry } from '@/lib/schemas'
 export function useScientistMemory() {
   const [accumulatedNotes, setAccumulatedNotes] = useState<NoteEntry[]>([])
   const [moodTrajectory, setMoodTrajectory] = useState<string[]>([])
+  const [interruptionCount, setInterruptionCount] = useState(0)
 
   // Refs for reading inside callbacks without stale closures
   const accumulatedNotesRef = useRef<NoteEntry[]>([])
   const moodTrajectoryRef = useRef<string[]>([])
+  const interruptionCountRef = useRef(0)
   useEffect(() => { accumulatedNotesRef.current = accumulatedNotes }, [accumulatedNotes])
   useEffect(() => { moodTrajectoryRef.current = moodTrajectory }, [moodTrajectory])
+  useEffect(() => { interruptionCountRef.current = interruptionCount }, [interruptionCount])
 
   const addNote = (text: string, interrupted = false) =>
     setAccumulatedNotes(prev => [...prev, { text, interrupted }])
@@ -28,19 +31,23 @@ export function useScientistMemory() {
     })
 
   const addMood = (mood: string) => setMoodTrajectory(prev => [...prev, mood])
+  const incrementInterruptions = () => setInterruptionCount(prev => prev + 1)
 
   const clear = () => {
     setAccumulatedNotes([])
     setMoodTrajectory([])
+    setInterruptionCount(0)
   }
 
   return {
     accumulatedNotes,
     moodTrajectory,
-    refs: { accumulatedNotesRef, moodTrajectoryRef },
+    interruptionCount,
+    refs: { accumulatedNotesRef, moodTrajectoryRef, interruptionCountRef },
     addNote,
     replaceLastNote,
     addMood,
+    incrementInterruptions,
     clear,
   }
 }
