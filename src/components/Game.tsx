@@ -18,7 +18,7 @@ import { useRoundGeneration } from '@/hooks/useRoundGeneration'
 type GamePhase = 'loading' | 'drafting' | 'brewing' | 'reveal'
 
 export default function Game() {
-  const [phase, setPhase] = useState<GamePhase>('drafting')
+  const [phase, setPhase] = useState<GamePhase>('loading')
   const [selections, setSelections] = useState<Selections>({
     form: null, feature: null, ability: null, flaw: null,
   })
@@ -60,7 +60,6 @@ export default function Game() {
   }, [])
 
   const { round, roundStream } = useRoundGeneration(
-    selectionsRef,
     () => setPhase('drafting'),
   )
 
