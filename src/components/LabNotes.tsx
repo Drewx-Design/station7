@@ -47,8 +47,9 @@ export function LabNotes({ labState, isLoading, judgmentKey, priorNotes, brewRea
         </div>
       )}
 
-      {/* Current streaming note */}
-      {labState?.scientist_note && (
+      {/* Current streaming note -- skip if already accumulated into priorNotes */}
+      {labState?.scientist_note &&
+        labState.scientist_note !== priorNotes[priorNotes.length - 1] && (
         <div className="lab-scientist-note note-enter" key={`note-${judgmentKey}`}>
           {labState.scientist_note}
           {isLoading && <span className="streaming-cursor" />}
