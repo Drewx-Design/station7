@@ -36,6 +36,9 @@ export type Round = z.infer<typeof RoundSchema>
 
 export const MicroJudgmentSchema = z.object({
   lab_mood: z.string().describe('Emotional state slug: fascinated, concerned, delighted, horrified, resigned, etc.'),
+  mood_intensity: z.number().int().min(0).max(100).describe(
+    'Intensity of current emotional state. 0 = barely perceptible, 100 = completely overwhelmed. Generally starts moderate (40-60) on first selection and escalates or plummets as conviction builds.'
+  ),
   motion_state: z.enum(['agitated', 'curious', 'resolved']).describe(
     'Energy level of the lab atmosphere. agitated = alarmed/fascinated/horrified (fast, chaotic). curious = intrigued/uncertain/analyzing (medium, searching). resolved = satisfied/resigned/triumphant (slow, settled).'
   ),

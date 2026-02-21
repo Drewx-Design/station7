@@ -11,12 +11,14 @@ export function SiteHeader({ fieldLogNumber }: { fieldLogNumber: number }) {
   )
 }
 
-export function ScenarioBar({ scenario, phase, reading, brewReady, judgmentKey }: {
+export function ScenarioBar({ scenario, phase, reading, brewReady, judgmentKey, labMood, moodIntensity }: {
   scenario: string
   phase: string
   reading?: string
   brewReady?: boolean
   judgmentKey?: number
+  labMood?: string
+  moodIntensity?: number
 }) {
   return (
     <div className="scenario-bar" data-phase={phase}>
@@ -26,6 +28,8 @@ export function ScenarioBar({ scenario, phase, reading, brewReady, judgmentKey }
         reading={reading}
         brewReady={brewReady ?? false}
         judgmentKey={judgmentKey ?? 0}
+        labMood={labMood}
+        moodIntensity={moodIntensity}
       />
     </div>
   )

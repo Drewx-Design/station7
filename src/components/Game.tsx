@@ -259,6 +259,8 @@ export default function Game() {
             reading={judgment.labState?.reading}
             brewReady={brewReady}
             judgmentKey={judgment.judgmentKey}
+            labMood={judgment.labState?.lab_mood}
+            moodIntensity={judgment.labState?.mood_intensity}
           />
 
           {(phase === 'drafting' || phase === 'loading') && (
