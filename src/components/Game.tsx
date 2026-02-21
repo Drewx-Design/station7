@@ -10,7 +10,6 @@ import { LabNotes } from './LabNotes'
 import { CreatureCard } from './CreatureCard'
 import { SelectionSummary } from './SelectionSummary'
 import { Bestiary } from './Bestiary'
-import { InstrumentStrip } from './InstrumentStrip'
 import { MoodBackground } from './MoodBackground'
 import { useScientistMemory } from '@/hooks/useScientistMemory'
 import { useMicroJudgment } from '@/hooks/useMicroJudgment'
@@ -205,6 +204,9 @@ export default function Game() {
           <ScenarioBar
             scenario={phase === 'loading' ? 'Station 7 is preparing your assignment...' : round.scenario}
             phase={phase}
+            reading={judgment.labState?.reading}
+            brewReady={brewReady}
+            judgmentKey={judgment.judgmentKey}
           />
 
           {(phase === 'drafting' || phase === 'loading') && (
@@ -216,11 +218,6 @@ export default function Game() {
                 judgmentKey={judgment.judgmentKey}
                 priorNotes={memory.accumulatedNotes}
                 onInterrupt={onInterrupt}
-              />
-              <InstrumentStrip
-                reading={judgment.labState?.reading}
-                brewReady={brewReady}
-                judgmentKey={judgment.judgmentKey}
               />
             </div>
           )}

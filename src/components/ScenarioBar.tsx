@@ -1,5 +1,7 @@
 'use client'
 
+import { InstrumentStrip } from './InstrumentStrip'
+
 export function SiteHeader({ fieldLogNumber }: { fieldLogNumber: number }) {
   return (
     <div className="site-header">
@@ -9,14 +11,22 @@ export function SiteHeader({ fieldLogNumber }: { fieldLogNumber: number }) {
   )
 }
 
-export function ScenarioBar({ scenario, phase }: {
+export function ScenarioBar({ scenario, phase, reading, brewReady, judgmentKey }: {
   scenario: string
   phase: string
+  reading?: string
+  brewReady?: boolean
+  judgmentKey?: number
 }) {
   return (
     <div className="scenario-bar" data-phase={phase}>
       <span className="scenario-label">SPECIMEN CHALLENGE</span>
       <h2 className="scenario-text">{scenario}</h2>
+      <InstrumentStrip
+        reading={reading}
+        brewReady={brewReady ?? false}
+        judgmentKey={judgmentKey ?? 0}
+      />
     </div>
   )
 }
