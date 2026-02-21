@@ -198,7 +198,8 @@ body {
 
 /* Scenario bar -- hero mission briefing banner */
 .scenario-bar {
-  flex: 1;
+  flex: 1 1 50%;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   background: var(--surface-1);
@@ -622,7 +623,8 @@ body {
   position: relative;
   display: flex;
   flex-direction: column;
-  flex: 1;
+  flex: 1 1 50%;
+  min-width: 0;
   background: var(--surface-2);
   border: 1px solid var(--border-rest);
   border-left: 2px solid var(--accent);
