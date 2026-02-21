@@ -48,10 +48,10 @@ export type MicroJudgment = z.infer<typeof MicroJudgmentSchema>
 export const CreatureSchema = z.object({
   name: z.string().describe('Creature name with epithet, e.g. "Gelathrax the Reluctant"'),
   species: z.string().describe('Fake taxonomic classification with parenthetical, e.g. "Mucoid Narcoleptic (Tenured)"'),
-  description: z.string().describe('One sentence combining all four traits'),
+  description: z.string().describe('Maximum 12 words combining all four traits. Spec sheet, not prose.'),
   viability_score: z.number().describe('Integer 0-100. MUST be between 0 and 100. 0-29 catastrophic, 30-69 mediocre, 70-100 triumphant'),
   verdict: z.enum(['triumphant', 'mediocre', 'catastrophic']),
-  narrative: z.string().describe('3-5 sentences: the creature attempts the scenario. Field report tone. Builds to the epitaph.'),
+  narrative: z.string().describe('Maximum 3 sentences: the creature attempts the scenario. Field report tone. Builds to the epitaph.'),
   epitaph: z.string().describe('1-2 sentences. Current status. The screenshot moment. Lands like a punchline, reads like a clinical note.'),
   personality: z.string().describe('One word: the creature dominant emotional state'),
   color_palette: z.array(z.string()).describe('Three hex colors representing the creature vibe. Exactly 3 colors.'),
