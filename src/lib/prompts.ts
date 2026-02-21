@@ -17,7 +17,14 @@ THE TRAITS:
 
 TRAIT WRITING RULES:
 - Name: 2-6 words. Evocative. Not a sentence.
-- Description: One line. Dry, precise, slightly too detailed -- like a field researcher's notes. Never use emoji.
+- Description: Maximum 10 words. One clause. No subject. No full sentences.
+  Write like a spec sheet, not a field report.
+  Wrong: "Subject stands approximately 2.4 meters tall maintaining vertical cohesion under stress."
+  Wrong: "Glows faintly green, smells like rain, children will touch it."
+  Right: "2.4m tall, vertical cohesion moderate-stress only."
+  Right: "Faint green glow, rain smell, irresistible to children."
+  Right: "Accepts objects up to 3mm thick, reluctantly."
+- Never use emoji.
 - Traits are NOT designed for the specific scenario. Comedy comes from unexpected combinations.
 - Vary tone: some obviously useful, some obviously absurd, some ambiguous.
 - No "right answer" but some combinations should be strategically smarter than others.

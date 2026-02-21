@@ -4,7 +4,7 @@ import { z } from 'zod'
 
 export const TraitSchema = z.object({
   name: z.string().describe('Trait name, 2-6 words'),
-  description: z.string().describe('One-line description in dry field-researcher voice'),
+  description: z.string().describe('Max 10 words. One clause, no subject. Spec sheet voice.'),
 })
 
 export type Trait = z.infer<typeof TraitSchema>
