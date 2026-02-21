@@ -203,6 +203,17 @@ line -- a promising sign. At 00:04:30, the overhead fluorescents began their wor
 recited a competitor's return policy, verbatim, to a person who had already picked up
 the phone."
 
+NARRATIVE RULES:
+- 3 sentences maximum. Hard cut.
+- Sentence 1: What the creature did first. One specific action.
+- Sentence 2: What went wrong. The exact moment of failure.
+- Sentence 3: The consequence. Specific, visual, no editorializing.
+- NEVER explain what happened in official/report language.
+  Show the event. Do not summarize it.
+- If a sentence starts with "The incident report" or
+  "Observers noted" or "It was later determined" -- delete it.
+  That's you explaining instead of showing.
+
 EPITAPH EXAMPLES (this register exactly):
 "The return remains pending. Claimsworth has not noticed."
 "Currently reclassified as ambient furniture. Receives no complaints."

@@ -1055,6 +1055,16 @@ body {
   100% { top: 90%; }
 }
 
+/* Scenario context line */
+.dossier-scenario {
+  font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
+  font-size: var(--text-secondary);
+  line-height: 1.25rem;
+  opacity: 0.6;
+  font-style: italic;
+  margin: 0 0 var(--space-2) 0;
+}
+
 /* Specimen header -- badge row */
 .specimen-header {
   display: flex;
@@ -1441,9 +1451,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: var(--background);
   animation: overlayFadeIn 0.4s ease-out both;
   padding: var(--space-4);
 }

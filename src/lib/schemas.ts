@@ -77,6 +77,7 @@ export type BestiaryEntry = {
   imageUrl: string | null
   selections: Selections
   fieldLogNumber: number
+  scenario: string
 }
 
 // === API Request Body Schemas (server-side validation) ===
