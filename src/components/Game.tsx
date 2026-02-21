@@ -67,9 +67,10 @@ export default function Game() {
   // --- Trait selection handler ---
   const onTraitSelect = useCallback((category: keyof Selections, trait: Trait) => {
     // 1. Terminate previous turn atomically
-    // Note: return value no longer used for note capture —
-    // LabNotes handles interrupted text via onInterrupt callback
-    judgment.cancelTurn()
+    // wasActive = true means a stream was in-flight (not just debounce-pending).
+    // LabNotes handles frozen text display via onInterrupt callback separately.
+    const { wasActive } = judgment.cancelTurn()
+    if (wasActive) memory.incrementInterruptions()
 
     // 2. Update selections
     const newSelections = { ...selectionsRef.current, [category]: trait }
@@ -125,7 +126,7 @@ export default function Game() {
   const onBrew = useCallback(() => {
     if (!round || brewStream.isLoading) return
 
-    const lastState = judgment.cancelTurn()
+    const { lastState } = judgment.cancelTurn()
     const capturedNote = lastState?.scientist_note && lastState.scientist_note.length >= 20
       ? lastState.scientist_note : null
 

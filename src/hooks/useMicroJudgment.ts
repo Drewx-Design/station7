@@ -7,6 +7,7 @@ export function useMicroJudgment(
   memoryRefs: {
     accumulatedNotesRef: React.RefObject<NoteEntry[]>
     moodTrajectoryRef: React.RefObject<string[]>
+    interruptionCountRef: React.RefObject<number>
   },
   bestiaryRef: React.RefObject<Creature[]>,
   onNoteAccumulated: (note: string, mood: string) => void,
@@ -54,6 +55,7 @@ export function useMicroJudgment(
           priorNotes: memoryRefs.accumulatedNotesRef.current.map(n => n.text),
           priorMoods: memoryRefs.moodTrajectoryRef.current,
           creatureCount: bestiaryRef.current.length,
+          interruptionCount: memoryRefs.interruptionCountRef.current,
         }),
         signal: controller.signal,
       })
@@ -109,26 +111,31 @@ export function useMicroJudgment(
   // --- Public API ---
 
   // Atomic turn cancellation: abort stream + clear display + return last state
-  const cancelTurn = useCallback((): Partial<MicroJudgment> | null => {
-    // 1. Kill the stream immediately — no more setLabState calls
+  // Returns wasActive so callers can detect whether a stream was in-flight
+  // (vs. idle or debounce-pending). Used for interruption counting.
+  const cancelTurn = useCallback((): { lastState: Partial<MicroJudgment> | null; wasActive: boolean } => {
+    // 1. Capture stream-active state BEFORE reset
+    const wasActive = labLoadingRef.current
+
+    // 2. Kill the stream immediately — no more setLabState calls
     if (abortRef.current) abortRef.current.abort()
 
-    // 2. Kill any pending debounce timer
+    // 3. Kill any pending debounce timer
     if (debounceRef.current) {
       clearTimeout(debounceRef.current)
       debounceRef.current = null
     }
 
-    // 3. Capture last state before clearing (synchronous ref read)
+    // 4. Capture last state before clearing (synchronous ref read)
     const lastState = labStateRef.current
 
-    // 4. Clear display + refs
+    // 5. Clear display + refs
     setLabState(null)
     labStateRef.current = null
     setLabLoading(false)
     labLoadingRef.current = false
 
-    return lastState
+    return { lastState, wasActive }
   }, [])
 
   // Encapsulate debounce logic — callers should not touch debounceRef directly

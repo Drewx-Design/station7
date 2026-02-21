@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     })
   }
 
-  const { scenario, selections, priorNotes, priorMoods, creatureCount } = parsed.data
+  const { scenario, selections, priorNotes, priorMoods, creatureCount, interruptionCount } = parsed.data
 
   // Sanitize all user-controlled strings before prompt interpolation
   const safeScenario = sanitizePromptInput(scenario, 2000)
@@ -57,9 +57,13 @@ ${traitsDescription}${memoryContext}
 
 Provide your updated assessment.`
 
-  const system = creatureCount > 0
+  let system = creatureCount > 0
     ? `${MICRO_JUDGMENT_SYSTEM}\n\nCROSS-ROUND CONTEXT: You have catalogued ${creatureCount} specimen${creatureCount === 1 ? '' : 's'} before this one. You are not new to this. Let that experience inflect your tone -- weariness, pattern recognition, rising standards, or the creeping suspicion that the universe is testing you.`
     : MICRO_JUDGMENT_SYSTEM
+
+  if (interruptionCount > 0) {
+    system += `\n\nINTERRUPTION CONTEXT: The subject has changed their selection ${interruptionCount} time${interruptionCount === 1 ? '' : 's'} while you were mid-observation. You were cut off. You noticed.`
+  }
 
   const result = streamObject({
     model: anthropic(SONNET_MODEL),
