@@ -21,7 +21,7 @@ export default function Game() {
   const [selections, setSelections] = useState<Selections>({
     form: null, feature: null, ability: null, flaw: null,
   })
-  const [expandedCategory, setExpandedCategory] = useState<keyof Selections | null>('form')
+  // expandedCategory removed — all categories visible simultaneously
   const [fieldLogNumber, setFieldLogNumber] = useState(47)
   useEffect(() => { setFieldLogNumber(Math.floor(Math.random() * 200) + 30) }, [])
   const [bestiary, setBestiary] = useState<Creature[]>([])
@@ -101,7 +101,6 @@ export default function Game() {
     judgment.abort()
     judgment.reset()
     setSelections({ form: null, feature: null, ability: null, flaw: null })
-    setExpandedCategory('form')
     memory.clear()
     setCommittedMotion('resolved')
     setBrewError(false)
@@ -139,105 +138,97 @@ export default function Game() {
         motionState={committedMotion}
         phase={phase}
       />
-      <div className="game-layout">
+      <div className="game-layout" data-phase={phase}>
         <ScenarioBar
           scenario={phase === 'loading' ? 'Station 7 is preparing your assignment...' : round.scenario}
           fieldLogNumber={fieldLogNumber}
           phase={phase}
         />
 
-        <div className="trait-column" data-phase={phase}>
-          {(phase === 'drafting' || phase === 'reveal' || phase === 'brewing') && (
-            <TraitAccordion
-              round={round}
-              selections={selections}
-              onSelect={onTraitSelect}
-              disabled={phase !== 'drafting'}
-              expandedCategory={expandedCategory}
-              onExpand={setExpandedCategory}
+        {(phase === 'drafting' || phase === 'loading') && (
+          <div className="lab-notes-container">
+            <h3 className="lab-title">LAB NOTES</h3>
+            <LabNotes
+              labState={judgment.labState}
+              isLoading={judgment.labLoading}
+              judgmentKey={judgment.judgmentKey}
+              priorNotes={memory.accumulatedNotes}
+              brewReady={brewReady}
             />
-          )}
+          </div>
+        )}
 
-          {phase === 'loading' && (
-            <div className="loading-state">
-              <p>Generating specimens...</p>
-            </div>
-          )}
-
-          <div className="brew-status" aria-live="polite">
-            {phase === 'drafting' && (
-              <button
-                className={`brew-button ${brewReady ? 'brew-ready-pulse' : ''}`}
-                disabled={!allSelected}
-                onClick={onBrew}
-              >
-                {allSelected ? 'READY TO BREW' : `AWAITING ${4 - selectedCount} MORE ${4 - selectedCount === 1 ? 'SELECTION' : 'SELECTIONS'}`}
-              </button>
-            )}
-
-            {phase === 'brewing' && (
-              <button className="brew-button brewing" disabled>
-                SYNTHESIZING...
-              </button>
-            )}
-
-            {phase === 'reveal' && (
-              <button className="play-again-button" onClick={onPlayAgain}>
-                NEW SPECIMEN
-              </button>
+        {phase === 'brewing' && (
+          <div className="lab-notes-container brewing">
+            <h3 className="lab-title">SYNTHESIZING SPECIMEN</h3>
+            {brewStream.object ? (
+              <CreatureCard
+                creature={brewStream.object}
+                isStreaming={brewStream.isLoading}
+              />
+            ) : (
+              <p className="lab-placeholder">Initiating brew sequence...</p>
             )}
           </div>
-        </div>
+        )}
 
-        <div className="lab-column">
-          {(phase === 'drafting' || phase === 'loading') && (
-            <div className="lab-notes-container">
-              <h3 className="lab-title">LAB NOTES</h3>
-              <LabNotes
-                labState={judgment.labState}
-                isLoading={judgment.labLoading}
-                judgmentKey={judgment.judgmentKey}
-                priorNotes={memory.accumulatedNotes}
-                brewReady={brewReady}
-              />
-            </div>
+        {phase === 'reveal' && brewStream.object && (
+          <div className="lab-notes-container">
+            <CreatureCard
+              creature={brewStream.object}
+              isStreaming={false}
+            />
+          </div>
+        )}
+
+        {brewError && (
+          <div className="brew-error">
+            <p>Station 7 containment anomaly.</p>
+            <button onClick={onBrew}>Retry</button>
+          </div>
+        )}
+
+        {(phase === 'drafting' || phase === 'reveal' || phase === 'brewing') && (
+          <TraitAccordion
+            round={round}
+            selections={selections}
+            onSelect={onTraitSelect}
+            disabled={phase !== 'drafting'}
+          />
+        )}
+
+        {phase === 'loading' && (
+          <div className="loading-state">
+            <p>Generating specimens...</p>
+          </div>
+        )}
+
+        <div className="brew-status" aria-live="polite">
+          {phase === 'drafting' && (
+            <button
+              className={`brew-button ${brewReady ? 'brew-ready-pulse' : ''}`}
+              disabled={!allSelected}
+              onClick={onBrew}
+            >
+              {allSelected ? 'READY TO BREW' : `AWAITING ${4 - selectedCount} MORE ${4 - selectedCount === 1 ? 'SELECTION' : 'SELECTIONS'}`}
+            </button>
           )}
 
           {phase === 'brewing' && (
-            <div className="lab-notes-container brewing">
-              <h3 className="lab-title">SYNTHESIZING SPECIMEN</h3>
-              {brewStream.object ? (
-                <CreatureCard
-                  creature={brewStream.object}
-                  isStreaming={brewStream.isLoading}
-                />
-              ) : (
-                <p className="lab-placeholder">Initiating brew sequence...</p>
-              )}
-            </div>
+            <button className="brew-button brewing" disabled>
+              SYNTHESIZING...
+            </button>
           )}
 
-          {phase === 'reveal' && brewStream.object && (
-            <div className="lab-notes-container">
-              <CreatureCard
-                creature={brewStream.object}
-                isStreaming={false}
-              />
-            </div>
-          )}
-
-          {brewError && (
-            <div className="brew-error">
-              <p>Station 7 containment anomaly.</p>
-              <button onClick={onBrew}>Retry</button>
-            </div>
+          {phase === 'reveal' && (
+            <button className="play-again-button" onClick={onPlayAgain}>
+              NEW SPECIMEN
+            </button>
           )}
         </div>
 
         {bestiary.length > 0 && (
-          <div className="bestiary-row">
-            <Bestiary creatures={bestiary} />
-          </div>
+          <Bestiary creatures={bestiary} />
         )}
       </div>
     </>

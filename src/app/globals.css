@@ -240,24 +240,22 @@ body {
 }
 
 /* ============================================
-   GAME LAYOUT -- Desktop-first two-column
+   GAME LAYOUT -- Single-column vertical flow
    ============================================ */
 
 .game-layout {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto 1fr;
-  gap: var(--space-2);      /* 16px -- tightened for instrument-panel density */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);      /* 16px between sections */
   min-height: 100vh;
-  padding: var(--space-3);  /* 24px -- compact outer frame */
-  max-width: 1400px;
+  padding: var(--space-3);  /* 24px outer frame */
+  max-width: 900px;
   margin: 0 auto;
   position: relative;
 }
 
-/* Scenario bar spans full width -- hero mission briefing banner */
+/* Scenario bar -- hero mission briefing banner */
 .scenario-bar {
-  grid-column: 1 / -1;
   background: var(--surface-1);
   border: 1px solid var(--border-rest);
   border-bottom: 3px solid var(--accent);
@@ -317,41 +315,13 @@ body {
   max-width: 960px;
 }
 
-/* Left column: trait categories -- scrolls naturally */
-.trait-column {
-  overflow-y: auto;
-}
-
-/* Right column: lab notes -- STICKY. Always visible. */
-.lab-column {
-  position: sticky;
-  top: var(--space-5);
-  max-height: calc(100vh - calc(var(--space-5) * 2));
-  overflow-y: auto;
-  align-self: start;
-}
-
-/* Scroll mask on sticky lab column */
-.lab-column::after {
-  content: '';
-  position: sticky;
-  bottom: 0;
-  display: block;
-  height: 2rem;
-  background: linear-gradient(to top, var(--surface-1), transparent);
-  pointer-events: none;
-}
-
 /* Minimal mobile fallback */
 @media (max-width: 768px) {
   .game-layout {
-    grid-template-columns: 1fr;
     padding: var(--space-2);
-    gap: var(--space-2);
   }
-  .lab-column {
-    position: static;
-    max-height: none;
+  .trait-accordion {
+    grid-template-columns: 1fr;
   }
 
   /* Mood orbs: reduced blur, fewer orbs, larger relative sizes */
@@ -376,9 +346,9 @@ body {
    ============================================ */
 
 .trait-accordion {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1); /* 8px between categories */
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2); /* 16px between category cells */
 }
 
 .accordion-category h3 {
@@ -390,38 +360,18 @@ body {
   display: flex;
   align-items: center;
   gap: var(--space-1);
-  padding: 12px;
+  padding: 8px 12px;
   border: 1px solid var(--border-rest);
-  border-radius: 6px;
+  border-radius: 6px 6px 0 0;
   background: var(--surface-1);
   color: var(--color-label);
-  cursor: pointer;
   font-family: var(--font-mono), 'JetBrains Mono', 'Fira Code', monospace;
   font-size: var(--text-label);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   transition: border-color 0.2s ease, background-color 0.2s ease,
-              border-radius 0.2s ease, opacity 0.2s ease;
-  min-height: 44px;
-  text-align: left;
+              opacity 0.2s ease;
   box-shadow: var(--shadow-bevel);
-}
-
-.accordion-header:hover:not(:disabled) {
-  border-color: var(--border-hover);
-  background: var(--surface-2);
-}
-
-.accordion-header:disabled {
-  cursor: default;
-  color: rgba(45, 179, 102, 0.35);
-}
-
-.accordion-header[aria-expanded="true"] {
-  border-color: var(--border-subtle);
-  background: var(--surface-1);
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
 }
 
 /* Selected category: green accent border + tinted background = completed checklist item */
@@ -431,25 +381,17 @@ body {
   background: var(--accent-dim);
 }
 
-/* Checkmark on selected + collapsed headers */
-.accordion-header[data-has-selection="true"]:not([aria-expanded="true"])::after {
+/* Checkmark on selected headers */
+.accordion-header[data-has-selection="true"]::after {
   content: '\2713';
   color: var(--accent);
   margin-left: auto;
   flex-shrink: 0;
 }
 
-/* Unselected + collapsed: dim to push focus toward incomplete categories */
-.accordion-header[data-has-selection="false"]:not([aria-expanded="true"]) {
-  color: rgba(45, 179, 102, 0.35);
-  opacity: 0.5;
-}
-
-.accordion-arrow {
-  font-size: var(--text-label);
-  opacity: 0.6;
-  flex-shrink: 0;
-  width: 0.75rem;
+/* Unselected: dim to push focus toward incomplete categories */
+.accordion-header[data-has-selection="false"] {
+  opacity: 0.7;
 }
 
 .accordion-label {
@@ -502,7 +444,7 @@ body {
 
 .trait-card {
   position: relative;
-  padding: 12px;
+  padding: 8px 12px;
   border: 1px solid var(--border-subtle);
   border-radius: 8px;
   cursor: pointer;
@@ -549,15 +491,15 @@ body {
 
 .trait-card .trait-name {
   font-weight: 600;
-  margin-bottom: calc(var(--space-1) / 2);
-  font-size: var(--text-body);
-  line-height: 1.5; /* 24px */
+  margin-bottom: 2px;
+  font-size: var(--text-secondary); /* 14px */
+  line-height: 1.25rem; /* 20px */
 }
 
 .trait-card .trait-description {
-  font-size: var(--text-secondary);
-  opacity: 0.7;
-  line-height: 1.25rem; /* 20px */
+  font-size: 0.75rem; /* 12px */
+  opacity: 0.6;
+  line-height: 1rem; /* 16px */
 }
 
 /* ============================================
@@ -642,16 +584,16 @@ body {
 }
 
 /* ============================================
-   REVEAL STATE -- Left column dims
+   REVEAL STATE -- Trait grid dims
    ============================================ */
 
-.trait-column[data-phase="reveal"] .trait-accordion {
+.game-layout[data-phase="reveal"] .trait-accordion {
   opacity: 0.4;
   pointer-events: none;
   transition: opacity 0.5s ease;
 }
 
-.trait-column[data-phase="brewing"] .trait-accordion {
+.game-layout[data-phase="brewing"] .trait-accordion {
   opacity: 0.5;
   pointer-events: none;
   transition: opacity 0.3s ease;
@@ -679,8 +621,15 @@ body {
   border: 2px solid var(--border-rest);
   border-radius: 12px;
   padding: var(--space-2);
-  min-height: 200px;
+  height: 200px;
+  overflow-y: auto;
   box-shadow: var(--shadow-bevel);
+}
+
+/* Brewing/reveal: CreatureCard needs room — unlock fixed height */
+.game-layout[data-phase="brewing"] .lab-notes-container,
+.game-layout[data-phase="reveal"] .lab-notes-container {
+  height: auto;
 }
 
 .lab-title {
@@ -961,11 +910,6 @@ body {
    BESTIARY -- Specimen archive bar
    ============================================ */
 
-.bestiary-row {
-  grid-column: 1 / -1;
-  margin-top: var(--space-2);
-}
-
 .bestiary {
   border-top: 1px solid var(--border-rest);
   padding-top: var(--space-3);
@@ -1074,7 +1018,6 @@ body {
    ============================================ */
 
 .trait-card:focus-visible,
-.accordion-header:focus-visible,
 .brew-button:focus-visible,
 .play-again-button:focus-visible {
   outline: 2px solid var(--accent);
@@ -1088,7 +1031,6 @@ body {
 @media (prefers-reduced-motion: reduce) {
   /* Interactive element transitions */
   .trait-card,
-  .accordion-header,
   .brew-button,
   .creature-card,
   .play-again-button {

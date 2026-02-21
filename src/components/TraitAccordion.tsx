@@ -2,7 +2,6 @@
 
 import type { Trait, Round, Selections } from '@/lib/schemas'
 import { TraitCard } from './TraitCard'
-import { useRef, useEffect } from 'react'
 
 const CATEGORY_LABELS: Record<keyof Selections, string> = {
   form: 'FORM',
@@ -11,34 +10,17 @@ const CATEGORY_LABELS: Record<keyof Selections, string> = {
   flaw: 'FLAW',
 }
 
-const CATEGORIES = ['form', 'feature', 'ability', 'flaw'] as const
+const CATEGORIES = ['form', 'ability', 'feature', 'flaw'] as const
 
-export function TraitAccordion({ round, selections, onSelect, disabled, expandedCategory, onExpand }: {
+export function TraitAccordion({ round, selections, onSelect, disabled }: {
   round: Round
   selections: Selections
   onSelect: (category: keyof Selections, trait: Trait) => void
   disabled: boolean
-  expandedCategory: keyof Selections | null
-  onExpand: (category: keyof Selections | null) => void
 }) {
-  const headerRefs = useRef<Record<string, HTMLButtonElement | null>>({})
-
-  // Scroll newly expanded header into view after transition
-  useEffect(() => {
-    if (!expandedCategory) return
-    const timeout = setTimeout(() => {
-      headerRefs.current[expandedCategory]?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-      })
-    }, 260) // slightly after 250ms CSS transition
-    return () => clearTimeout(timeout)
-  }, [expandedCategory])
-
   return (
     <div className="trait-accordion">
       {CATEGORIES.map(category => {
-        const isExpanded = expandedCategory === category
         const selection = selections[category]
         const panelId = `panel-${category}`
         const headerId = `header-${category}`
@@ -46,29 +28,22 @@ export function TraitAccordion({ round, selections, onSelect, disabled, expanded
         return (
           <div key={category} className="accordion-category">
             <h3>
-              <button
-                ref={el => { headerRefs.current[category] = el }}
+              <div
                 id={headerId}
                 className="accordion-header"
                 data-has-selection={!!selection}
-                aria-expanded={isExpanded}
-                aria-controls={panelId}
-                onClick={() => !disabled && onExpand(isExpanded ? null : category)}
-                disabled={disabled}
-                type="button"
               >
-                <span className="accordion-arrow">{isExpanded ? '\u25BC' : '\u25B6'}</span>
                 <span className="accordion-label">{CATEGORY_LABELS[category]}</span>
-                {!isExpanded && selection && (
-                  <span className="accordion-selection">{selection.name}</span>
+                {selection && (
+                  <span className="accordion-selection">&mdash; {selection.name}</span>
                 )}
-              </button>
+              </div>
             </h3>
 
             <div
               id={panelId}
               className="accordion-panel"
-              data-expanded={isExpanded}
+              data-expanded={true}
               role="region"
               aria-labelledby={headerId}
             >
