@@ -648,6 +648,12 @@ body {
   min-height: 0; /* required for flex children to scroll */
   scroll-behavior: smooth;
   box-shadow: var(--shadow-inset);
+  scrollbar-width: none;           /* Firefox */
+  -ms-overflow-style: none;        /* IE/Edge */
+}
+
+.lab-notes::-webkit-scrollbar {
+  display: none;                   /* Chrome/Safari */
 }
 
 .lab-placeholder {
