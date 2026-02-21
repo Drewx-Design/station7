@@ -130,9 +130,9 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: auto 1fr;
-  gap: 2rem;
+  gap: var(--space-4);      /* 32px -- between columns */
   min-height: 100vh;
-  padding: 2rem;
+  padding: var(--space-5);  /* 40px -- outer frame breathing room */
   max-width: 1400px;
   margin: 0 auto;
   position: relative;
@@ -147,7 +147,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--space-1);
 }
 
 .field-log-id {
@@ -183,8 +183,8 @@ body {
 /* Right column: lab notes -- STICKY. Always visible. */
 .lab-column {
   position: sticky;
-  top: 2rem;
-  max-height: calc(100vh - 4rem);
+  top: var(--space-5);
+  max-height: calc(100vh - calc(var(--space-5) * 2));
   overflow-y: auto;
   align-self: start;
 }
@@ -204,8 +204,8 @@ body {
 @media (max-width: 768px) {
   .game-layout {
     grid-template-columns: 1fr;
-    padding: 1rem;
-    gap: 1rem;
+    padding: var(--space-2);
+    gap: var(--space-2);
   }
   .lab-column {
     position: static;
@@ -220,7 +220,7 @@ body {
 .trait-accordion {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: var(--space-1); /* 8px between categories */
 }
 
 .accordion-category h3 {
@@ -231,8 +231,8 @@ body {
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1rem;
+  gap: var(--space-1);
+  padding: var(--space-2);
   border: 1px solid var(--border-rest);
   border-radius: 6px;
   background: var(--surface-1);
@@ -314,7 +314,7 @@ body {
 }
 
 .accordion-panel[data-expanded="true"] .accordion-panel-inner {
-  padding: 0.75rem 0 1rem;
+  padding: var(--space-2) 0;
   box-shadow: var(--shadow-inset);
 }
 
@@ -325,12 +325,12 @@ body {
 .trait-grid {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--space-2); /* 16px -- matches card padding per Law of Proximity */
 }
 
 .trait-card {
   position: relative;
-  padding: 0.75rem 1rem;
+  padding: var(--space-2);
   border: 1px solid var(--border-subtle);
   border-radius: 8px;
   cursor: pointer;
@@ -377,7 +377,7 @@ body {
 
 .trait-card .trait-name {
   font-weight: 600;
-  margin-bottom: 0.25rem;
+  margin-bottom: calc(var(--space-1) / 2);
   font-size: var(--text-body);
   line-height: 1.5; /* 24px */
 }
@@ -394,7 +394,7 @@ body {
 
 .brew-button {
   width: 100%;
-  padding: 1rem 2rem;
+  padding: var(--space-2) var(--space-4);
   border: 1px solid var(--border-hover);
   border-radius: 8px;
   background: var(--surface-2);
@@ -405,7 +405,7 @@ body {
   cursor: pointer;
   transition: border-color 0.3s ease, background-color 0.3s ease,
               box-shadow 0.3s ease, opacity 0.3s ease;
-  margin-top: 1rem;
+  margin-top: var(--space-2);
 }
 
 .brew-button:disabled {
@@ -442,7 +442,7 @@ body {
 
 .play-again-button {
   width: 100%;
-  padding: 1rem 2rem;
+  padding: var(--space-2) var(--space-4);
   border: 1px solid var(--border-hover);
   border-radius: 8px;
   background: var(--surface-3);
@@ -453,7 +453,7 @@ body {
   cursor: pointer;
   transition: border-color 0.3s ease, background-color 0.3s ease,
               opacity 0.3s ease;
-  margin-top: 1rem;
+  margin-top: var(--space-2);
   opacity: 1;
   pointer-events: auto;
   position: relative;
@@ -502,7 +502,7 @@ body {
   background: var(--surface-1);
   border: 2px solid var(--border-rest);
   border-radius: 12px;
-  padding: 1.5rem;
+  padding: var(--space-3);
   min-height: 200px;
   box-shadow: var(--shadow-bevel);
 }
@@ -512,7 +512,7 @@ body {
   font-size: var(--text-label);
   letter-spacing: 0.18em;
   opacity: 0.55;
-  margin-bottom: 1.25rem;
+  margin-bottom: var(--space-2);
 }
 
 .lab-notes {
@@ -526,7 +526,7 @@ body {
   opacity: 0.3;
   font-style: italic;
   text-align: center;
-  padding: 2rem 0;
+  padding: var(--space-4) 0;
 }
 
 /* Scientist notes fade-in */
@@ -553,7 +553,7 @@ body {
   opacity: 0.7;
   text-transform: uppercase;
   text-align: center;
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-2);
 }
 
 /* Scientist note -- the star. Large, centered, generous breathing room.
@@ -563,7 +563,7 @@ body {
   font-size: var(--text-display);
   line-height: 2.25rem; /* 36px -- 1.63× ratio */
   text-align: center;
-  padding: 1.5rem 0.5rem;
+  padding: var(--space-3) var(--space-1);
   max-width: 480px;
   margin: 0 auto;
 }
@@ -575,8 +575,8 @@ body {
   line-height: 1.5; /* 24px */
   text-align: center;
   opacity: 0.55;
-  padding: 0.75rem 0.5rem;
-  margin: 0 auto 0.75rem;
+  padding: var(--space-1) var(--space-1);
+  margin: 0 auto var(--space-1);
   max-width: 480px;
   border-bottom: 1px solid var(--border-rest);
 }
@@ -603,7 +603,7 @@ body {
 
 .creature-card {
   border-radius: 12px;
-  padding: 2rem;
+  padding: var(--space-4);
   transition: border-color 0.5s ease, background-color 0.5s ease,
               opacity 0.5s ease;
 }
@@ -632,7 +632,7 @@ body {
   font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
   font-size: var(--text-headline);
   font-weight: 700;
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 var(--space-1) 0;
   line-height: 2.25rem; /* 36px */
 }
 
@@ -641,21 +641,21 @@ body {
   font-size: var(--text-secondary);
   line-height: 1.25rem; /* 20px */
   opacity: 0.7;
-  margin: 0 0 1rem 0;
+  margin: 0 0 var(--space-2) 0;
 }
 
 .creature-description {
   font-size: var(--text-body);
   line-height: 1.5; /* 24px */
   opacity: 0.85;
-  margin: 0 0 1.25rem 0;
+  margin: 0 0 var(--space-3) 0;
 }
 
 .creature-score {
   display: flex;
   align-items: baseline;
-  gap: 0.75rem;
-  margin-bottom: 1.25rem;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
 }
 
 .score-number {
@@ -680,13 +680,13 @@ body {
 
 /* Epitaph separator */
 .epitaph-separator {
-  margin-top: 1.5rem;
+  margin-top: var(--space-3);
 }
 
 .epitaph-rule {
   border: none;
   border-top: 1px dashed var(--border-hover);
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--space-1);
 }
 
 .epitaph-label {
@@ -696,14 +696,14 @@ body {
   text-transform: uppercase;
   opacity: 0.55;
   display: block;
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--space-1);
 }
 
 .creature-epitaph {
   font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
   font-style: italic;
   border-left: 2px solid currentColor;
-  padding-left: 1rem;
+  padding-left: var(--space-2);
   margin: 0;
   font-size: var(--text-body);
   line-height: 1.5; /* 24px */
@@ -759,8 +759,8 @@ body {
 }
 
 .brew-error {
-  margin-top: 1rem;
-  padding: 1rem;
+  margin-top: var(--space-2);
+  padding: var(--space-2);
   border: 1px solid rgba(239, 68, 68, 0.3);
   border-radius: 8px;
   background: rgba(239, 68, 68, 0.1);
@@ -768,8 +768,8 @@ body {
 }
 
 .brew-error button {
-  margin-top: 0.5rem;
-  padding: 0.5rem 1rem;
+  margin-top: var(--space-1);
+  padding: var(--space-1) var(--space-2);
   border: 1px solid var(--border-hover);
   border-radius: 4px;
   background: transparent;
@@ -786,12 +786,12 @@ body {
 
 .bestiary-row {
   grid-column: 1 / -1;
-  margin-top: 1rem;
+  margin-top: var(--space-2);
 }
 
 .bestiary {
   border-top: 1px solid var(--border-rest);
-  padding-top: 1.5rem;
+  padding-top: var(--space-3);
 }
 
 .bestiary-title {
@@ -799,14 +799,14 @@ body {
   font-size: var(--text-label);
   letter-spacing: 0.18em;
   opacity: 0.55;
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-2);
 }
 
 .bestiary-scroll {
   display: flex;
-  gap: 1rem;
+  gap: var(--space-2);
   overflow-x: auto;
-  padding-bottom: 0.5rem;
+  padding-bottom: var(--space-1);
   scroll-behavior: smooth;
 }
 
@@ -826,13 +826,13 @@ body {
 
 .bestiary-card {
   flex: 0 0 280px;
-  padding: 1rem 1.25rem;
+  padding: var(--space-2);
   border: 1px solid var(--border-subtle);
   border-radius: 8px;
   background: var(--surface-1);
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--space-1);
   animation: bestiarySlideIn 0.4s ease-out both;
   box-shadow: var(--shadow-bevel);
 }
@@ -867,7 +867,7 @@ body {
 .bestiary-info {
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
+  gap: calc(var(--space-1) / 2); /* 4px sub-grid */
 }
 
 .bestiary-name {
@@ -889,7 +889,7 @@ body {
   line-height: 1.25rem; /* 20px */
   opacity: 0.6;
   border-left: 1px solid var(--border-hover);
-  padding-left: 0.75rem;
+  padding-left: var(--space-1);
 }
 
 /* ============================================
