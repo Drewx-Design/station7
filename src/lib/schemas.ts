@@ -88,8 +88,8 @@ export type BestiaryEntry = {
 export const MicroJudgmentRequestSchema = z.object({
   scenario: z.string().min(1).max(2000),
   selections: z.record(z.string(), TraitSchema.nullable()),
-  priorNotes: z.array(z.string().max(500)).max(10).optional().default([]),
-  priorMoods: z.array(z.string().max(100)).max(10).optional().default([]),
+  priorNotes: z.array(z.string().max(2000)).max(20).optional().default([]),
+  priorMoods: z.array(z.string().max(200)).max(20).optional().default([]),
   creatureCount: z.number().int().min(0).max(1000).optional().default(0),
   interruptionCount: z.number().int().min(0).max(20).optional().default(0),
 })
@@ -97,8 +97,8 @@ export const MicroJudgmentRequestSchema = z.object({
 export const BrewRequestSchema = z.object({
   scenario: z.string().min(1).max(2000),
   selections: z.record(z.string(), TraitSchema),
-  accumulatedNotes: z.array(z.string().max(500)).max(10).optional().default([]),
-  moodTrajectory: z.array(z.string().max(100)).max(10).optional().default([]),
+  accumulatedNotes: z.array(z.string().max(2000)).max(20).optional().default([]),
+  moodTrajectory: z.array(z.string().max(200)).max(20).optional().default([]),
 })
 
 // === Image Generation ===

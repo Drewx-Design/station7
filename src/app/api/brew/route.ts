@@ -16,7 +16,8 @@ export async function POST(req: Request) {
   }
   const parsed = BrewRequestSchema.safeParse(body)
   if (!parsed.success) {
-    return new Response(JSON.stringify({ error: 'Invalid request body' }), {
+    console.error('[brew] Validation failed:', parsed.error.issues)
+    return new Response(JSON.stringify({ error: 'Invalid request body', issues: parsed.error.issues }), {
       status: 400,
       headers: { 'Content-Type': 'application/json' },
     })
