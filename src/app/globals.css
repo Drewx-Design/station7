@@ -618,6 +618,42 @@ body {
 }
 
 /* ============================================
+   SELECTION SUMMARY -- Reveal phase trait recap
+   ============================================ */
+
+.selection-summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  opacity: 0.4;
+  padding: var(--space-3);
+}
+
+.summary-line {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.summary-label {
+  min-width: 7ch;
+  color: var(--foreground);
+  font-weight: 600;
+}
+
+.summary-dot {
+  color: var(--foreground);
+  opacity: 0.3;
+}
+
+.summary-value {
+  color: var(--foreground);
+  opacity: 0.7;
+}
+
+/* ============================================
    BREW ANIMATION
    ============================================ */
 
