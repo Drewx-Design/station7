@@ -1474,8 +1474,8 @@ body {
 .dossier-overlay-content {
   position: relative;
   width: 100%;
-  max-width: 640px;
-  max-height: 70vh;
+  max-width: 900px;
+  max-height: 90vh;
   overflow-y: auto;
   animation: overlaySlideUp 0.4s ease-out both;
 }
