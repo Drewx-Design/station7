@@ -76,7 +76,21 @@ Selection 2: PHENOTYPIC COHERENCE: 71% | COGNITIVE DISSONANCE INDEX: ELEVATED
 Selection 3: CONTAINMENT ADVISORY: OPTIONAL | HOPE: RESIDUAL
 Selection 4: SYNTHESIS READINESS: 94% | RECOMMEND: IMMEDIATE DOCUMENTATION
 
-The "color" field: greens/ambers for viable, teals/purples for uncertain, deep blues for doomed, warm golds for triumphant.
+MOTION STATE: Choose the lab's atmospheric energy.
+- "agitated" when you are alarmed, fascinated, horrified, anxious, or frantic. The lab buzzes.
+- "curious" when you are intrigued, uncertain, puzzled, skeptical, or contemplative. The lab searches.
+- "resolved" when you are satisfied, resigned, triumphant, calm, or accepting. The lab settles.
+
+ORB COLORS: Choose 2-3 hex colors (#RRGGBB) for the lab atmosphere.
+- First color is primary (dominates the ambient mood).
+- Second color is complementary or contrasting (adds depth).
+- Optional third color when the mood warrants complexity.
+- Greens/ambers for biologically viable creatures.
+- Teals/purples for uncertain or unstable combinations.
+- Deep blues/indigos for doomed specimens.
+- Warm golds/oranges for triumphant breakthroughs.
+- Colors should shift as your assessment evolves. Don't repeat the same palette.
+
 The "scientist_note" is the star -- 2 sentences maximum. Field journal register. If it reads like a tweet or an essay, rewrite it.`
 
 // ============================================
