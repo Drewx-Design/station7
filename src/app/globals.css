@@ -248,14 +248,33 @@ body {
   flex-direction: column;
   gap: var(--space-2);      /* 16px between sections */
   min-height: 100vh;
-  padding: var(--space-3);  /* 24px outer frame */
-  max-width: 900px;
+  max-width: 1100px;
   margin: 0 auto;
+  padding: var(--space-4) var(--space-3) 0; /* 32px top, 24px sides */
   position: relative;
+}
+
+/* Top panels -- scenario + lab notes side by side */
+.top-panels {
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+}
+
+/* Site header -- identity bar */
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-2) 0;
+  font-size: var(--text-label);
+  letter-spacing: 0.15em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: var(--space-2);
 }
 
 /* Scenario bar -- hero mission briefing banner */
 .scenario-bar {
+  flex: 1;
   background: var(--surface-1);
   border: 1px solid var(--border-rest);
   border-bottom: 3px solid var(--accent);
@@ -271,13 +290,6 @@ body {
 }
 .scenario-bar[data-phase="reveal"] {
   opacity: 0.4;
-}
-
-.scenario-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--space-2);
 }
 
 .field-log-id {
@@ -320,6 +332,9 @@ body {
   .game-layout {
     padding: var(--space-2);
   }
+  .top-panels {
+    flex-direction: column;
+  }
   .trait-accordion {
     grid-template-columns: 1fr;
   }
@@ -348,7 +363,26 @@ body {
 .trait-accordion {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--space-2); /* 16px between category cells */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.accordion-category {
+  padding: var(--space-2);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Remove border from right column */
+.accordion-category:nth-child(2n) {
+  border-right: none;
+}
+
+/* Remove border from bottom row */
+.accordion-category:nth-child(3),
+.accordion-category:nth-child(4) {
+  border-bottom: none;
 }
 
 .accordion-category h3 {
@@ -360,25 +394,21 @@ body {
   display: flex;
   align-items: center;
   gap: var(--space-1);
-  padding: 8px 12px;
-  border: 1px solid var(--border-rest);
-  border-radius: 6px 6px 0 0;
-  background: var(--surface-1);
+  padding: 4px 0;
+  margin-bottom: var(--space-1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   color: var(--color-label);
   font-family: var(--font-mono), 'JetBrains Mono', 'Fira Code', monospace;
   font-size: var(--text-label);
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  transition: border-color 0.2s ease, background-color 0.2s ease,
-              opacity 0.2s ease;
-  box-shadow: var(--shadow-bevel);
+  transition: opacity 0.2s ease;
 }
 
-/* Selected category: green accent border + tinted background = completed checklist item */
+/* Selected category: green accent = completed checklist item */
 .accordion-header[data-has-selection="true"] {
   opacity: 1;
-  border-color: var(--border-hover);
-  background: var(--accent-dim);
+  color: var(--accent);
 }
 
 /* Checkmark on selected headers */
@@ -411,25 +441,13 @@ body {
   min-width: 0;
 }
 
-/* Expand/collapse animation via grid rows */
+/* Panels always expanded in single-column layout */
 .accordion-panel {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 250ms ease-out;
-}
-
-.accordion-panel[data-expanded="true"] {
-  grid-template-rows: 1fr;
+  display: block;
 }
 
 .accordion-panel-inner {
   min-height: 0;
-  overflow: hidden;
-}
-
-.accordion-panel[data-expanded="true"] .accordion-panel-inner {
-  padding: var(--space-1) 0;
-  box-shadow: var(--shadow-inset);
 }
 
 /* ============================================
@@ -439,12 +457,12 @@ body {
 .trait-grid {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1); /* 8px -- tightened for instrument-panel density */
+  gap: 4px;
 }
 
 .trait-card {
   position: relative;
-  padding: 8px 12px;
+  padding: 8px 10px;
   border: 1px solid var(--border-subtle);
   border-radius: 8px;
   cursor: pointer;
@@ -461,7 +479,7 @@ body {
 }
 
 .trait-card[data-selected="true"] {
-  border-color: var(--mood-color, #1a2a3a);
+  border-color: var(--accent);
   background: var(--surface-3);
   box-shadow: var(--shadow-bevel);
 }
@@ -617,19 +635,14 @@ body {
    ============================================ */
 
 .lab-notes-container {
-  background: var(--surface-1);
-  border: 2px solid var(--border-rest);
+  flex: 1;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-rest);
+  border-left: 2px solid var(--accent);
   border-radius: 12px;
   padding: var(--space-2);
-  height: 200px;
   overflow-y: auto;
   box-shadow: var(--shadow-bevel);
-}
-
-/* Brewing/reveal: CreatureCard needs room — unlock fixed height */
-.game-layout[data-phase="brewing"] .lab-notes-container,
-.game-layout[data-phase="reveal"] .lab-notes-container {
-  height: auto;
 }
 
 .lab-title {

@@ -23,10 +23,10 @@ export type Selections = {
 export const RoundSchema = z.object({
   scenario: z.string().describe('The absurd human scenario the creature must survive'),
   traits: z.object({
-    form: z.array(TraitSchema).describe('4 core body/shape/material traits'),
-    feature: z.array(TraitSchema).describe('4 physical detail/appendage traits'),
-    ability: z.array(TraitSchema).describe('4 mental/sensory/supernatural traits'),
-    flaw: z.array(TraitSchema).describe('4 mandatory weakness traits'),
+    form: z.array(TraitSchema).describe('3 core body/shape/material traits'),
+    feature: z.array(TraitSchema).describe('3 physical detail/appendage traits'),
+    ability: z.array(TraitSchema).describe('3 mental/sensory/supernatural traits'),
+    flaw: z.array(TraitSchema).describe('3 mandatory weakness traits'),
   }),
 })
 

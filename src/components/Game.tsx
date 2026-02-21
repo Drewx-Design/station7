@@ -4,7 +4,7 @@ import { experimental_useObject as useObject } from '@ai-sdk/react'
 import { CreatureSchema } from '@/lib/schemas'
 import type { Trait, Creature, Selections, MotionState } from '@/lib/schemas'
 import { useRef, useState, useCallback, useEffect } from 'react'
-import { ScenarioBar } from './ScenarioBar'
+import { SiteHeader, ScenarioBar } from './ScenarioBar'
 import { TraitAccordion } from './TraitAccordion'
 import { LabNotes } from './LabNotes'
 import { CreatureCard } from './CreatureCard'
@@ -139,54 +139,56 @@ export default function Game() {
         phase={phase}
       />
       <div className="game-layout" data-phase={phase}>
-        <ScenarioBar
-          scenario={phase === 'loading' ? 'Station 7 is preparing your assignment...' : round.scenario}
-          fieldLogNumber={fieldLogNumber}
-          phase={phase}
-        />
+        <SiteHeader fieldLogNumber={fieldLogNumber} />
+        <div className="top-panels">
+          <ScenarioBar
+            scenario={phase === 'loading' ? 'Station 7 is preparing your assignment...' : round.scenario}
+            phase={phase}
+          />
 
-        {(phase === 'drafting' || phase === 'loading') && (
-          <div className="lab-notes-container">
-            <h3 className="lab-title">LAB NOTES</h3>
-            <LabNotes
-              labState={judgment.labState}
-              isLoading={judgment.labLoading}
-              judgmentKey={judgment.judgmentKey}
-              priorNotes={memory.accumulatedNotes}
-              brewReady={brewReady}
-            />
-          </div>
-        )}
+          {(phase === 'drafting' || phase === 'loading') && (
+            <div className="lab-notes-container">
+              <h3 className="lab-title">LAB NOTES</h3>
+              <LabNotes
+                labState={judgment.labState}
+                isLoading={judgment.labLoading}
+                judgmentKey={judgment.judgmentKey}
+                priorNotes={memory.accumulatedNotes}
+                brewReady={brewReady}
+              />
+            </div>
+          )}
 
-        {phase === 'brewing' && (
-          <div className="lab-notes-container brewing">
-            <h3 className="lab-title">SYNTHESIZING SPECIMEN</h3>
-            {brewStream.object ? (
+          {phase === 'brewing' && (
+            <div className="lab-notes-container brewing">
+              <h3 className="lab-title">SYNTHESIZING SPECIMEN</h3>
+              {brewStream.object ? (
+                <CreatureCard
+                  creature={brewStream.object}
+                  isStreaming={brewStream.isLoading}
+                />
+              ) : (
+                <p className="lab-placeholder">Initiating brew sequence...</p>
+              )}
+            </div>
+          )}
+
+          {phase === 'reveal' && brewStream.object && (
+            <div className="lab-notes-container">
               <CreatureCard
                 creature={brewStream.object}
-                isStreaming={brewStream.isLoading}
+                isStreaming={false}
               />
-            ) : (
-              <p className="lab-placeholder">Initiating brew sequence...</p>
-            )}
-          </div>
-        )}
+            </div>
+          )}
 
-        {phase === 'reveal' && brewStream.object && (
-          <div className="lab-notes-container">
-            <CreatureCard
-              creature={brewStream.object}
-              isStreaming={false}
-            />
-          </div>
-        )}
-
-        {brewError && (
-          <div className="brew-error">
-            <p>Station 7 containment anomaly.</p>
-            <button onClick={onBrew}>Retry</button>
-          </div>
-        )}
+          {brewError && (
+            <div className="brew-error">
+              <p>Station 7 containment anomaly.</p>
+              <button onClick={onBrew}>Retry</button>
+            </div>
+          )}
+        </div>
 
         {(phase === 'drafting' || phase === 'reveal' || phase === 'brewing') && (
           <TraitAccordion
