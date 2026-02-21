@@ -43,7 +43,9 @@ export async function POST(req: Request) {
   let memoryContext = ''
   if (safePriorNotes.length > 0) {
     memoryContext = `\n\nYOUR PRIOR OBSERVATIONS (you said these -- build on them, don't repeat):
-${safePriorNotes.map((note: string, i: number) => `[Observation ${i + 1}] ${note}`).join('\n')}
+${safePriorNotes.map((note: string, i: number) =>
+  `[Observation ${i + 1}] ${note}`
+).join('\n')}
 
 YOUR EMOTIONAL TRAJECTORY SO FAR: ${safePriorMoods.join(' -> ')}`
   }

@@ -683,13 +683,17 @@ body {
    ============================================ */
 
 .lab-notes-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
   flex: 1;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--border-rest);
   border-left: 2px solid var(--accent);
   border-radius: 12px;
   padding: var(--space-2);
-  overflow-y: auto;
+  min-height: 200px;
+  max-height: calc(100vh - 8rem);
   box-shadow: var(--shadow-bevel);
 }
 
@@ -702,8 +706,9 @@ body {
 }
 
 .lab-notes {
+  flex: 1;
   overflow-y: auto;
-  max-height: 100%;
+  min-height: 0; /* required for flex children to scroll */
   scroll-behavior: smooth;
   box-shadow: var(--shadow-inset);
 }
@@ -742,29 +747,40 @@ body {
   margin-bottom: var(--space-2);
 }
 
-/* Scientist note -- the star. Large, centered, generous breathing room.
-   Two sentences pinned to a corkboard, not a dense log entry. */
+/* Scientist note -- typed live by the scientist. Left-aligned, large,
+   characters drip in via typewriter effect. */
 .lab-scientist-note {
   font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
   font-size: var(--text-display);
   line-height: 2.25rem; /* 36px -- 1.63× ratio */
-  text-align: center;
+  text-align: left;
   padding: var(--space-3) var(--space-1);
   max-width: 480px;
-  margin: 0 auto;
+  margin: 0;
 }
 
-/* Prior completed notes -- dimmed, centered, stacked above current */
+/* Prior completed notes -- same treatment as current, slightly dimmed. Chat log. */
 .lab-prior-note {
   font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
   font-size: var(--text-body);
   line-height: 1.5; /* 24px */
-  text-align: center;
+  text-align: left;
   opacity: 0.55;
   padding: var(--space-1) var(--space-1);
-  margin: 0 auto var(--space-1);
+  margin: 0 0 var(--space-1);
   max-width: 480px;
   border-bottom: 1px solid var(--border-rest);
+  transition: opacity 0.3s ease;
+}
+
+/* Interrupted fragment — frozen mid-thought */
+.lab-prior-note[data-interrupted] {
+  opacity: 0.35;
+}
+
+.lab-prior-note[data-interrupted]::after {
+  content: '\2014';  /* em-dash */
+  opacity: 0.5;
 }
 
 /* ============================================
@@ -772,16 +788,61 @@ body {
    ============================================ */
 
 .streaming-cursor::after {
-  content: '\25CF';
-  color: var(--accent);
+  content: '|';
   animation: cursorBlink 1s ease-in-out infinite;
-  opacity: 0.4;
-  margin-left: 4px;
+  opacity: 0.6;
+  margin-left: 2px;
+  font-weight: 300;
 }
 
 @keyframes cursorBlink {
   0%, 100% { opacity: 0.1; }
   50% { opacity: 0.6; }
+}
+
+/* ============================================
+   MUTE TOGGLE
+   ============================================ */
+
+.mute-toggle {
+  position: absolute;
+  bottom: 0.75rem;
+  right: 0.75rem;
+  z-index: 2;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--foreground);
+  opacity: 0.25;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  padding: 0;
+  /* 44px minimum touch target via padding */
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.mute-toggle:hover {
+  opacity: 0.6;
+}
+
+.mute-toggle:focus-visible {
+  outline: 1px solid rgba(255, 255, 255, 0.3);
+  outline-offset: 2px;
+  opacity: 0.6;
+}
+
+/* Respect reduced motion: skip typewriter entirely */
+@media (prefers-reduced-motion: reduce) {
+  .streaming-cursor::after {
+    animation: none;
+    opacity: 0.4;
+  }
 }
 
 /* ============================================

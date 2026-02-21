@@ -47,6 +47,16 @@ export default function Game() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // LabNotes reports frozen typewriter text on interruption.
+  // Must be useCallback — unstable ref in useTypewriter's useEffect deps
+  // would cause the effect to re-run every render.
+  // Uses replaceLastNote: if the stream already completed (full note in memory),
+  // replaces it with the fragment. If stream was mid-flight, just adds it.
+  const onInterrupt = useCallback((frozenText: string) => {
+    memory.replaceLastNote(frozenText)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const { round, roundStream } = useRoundGeneration(
     selectionsRef,
     () => setPhase('drafting'),
@@ -56,21 +66,22 @@ export default function Game() {
 
   // --- Trait selection handler ---
   const onTraitSelect = useCallback((category: keyof Selections, trait: Trait) => {
-    const isSwap = selectionsRef.current[category] !== null
+    // 1. Terminate previous turn atomically
+    // Note: return value no longer used for note capture —
+    // LabNotes handles interrupted text via onInterrupt callback
+    judgment.cancelTurn()
+
+    // 2. Update selections
     const newSelections = { ...selectionsRef.current, [category]: trait }
     setSelections(newSelections)
 
-    if (isSwap) memory.clear()
-
-    if (judgment.debounceRef.current) clearTimeout(judgment.debounceRef.current)
-    judgment.debounceRef.current = setTimeout(() => {
-      const selected = Object.fromEntries(
-        Object.entries(newSelections).filter(([, t]) => t !== null)
-      )
-      judgment.fetchMicroJudgment(selected as Record<string, Trait>)
-    }, 150)
+    // 3. Debounce new fetch via hook method (no ref leak)
+    const selected = Object.fromEntries(
+      Object.entries(newSelections).filter(([, t]) => t !== null)
+    )
+    judgment.debounceFetch(selected as Record<string, Trait>)
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [judgment.fetchMicroJudgment])
+  }, [judgment.cancelTurn, judgment.debounceFetch])
 
   // --- Brew ---
   const [brewError, setBrewError] = useState(false)
@@ -113,21 +124,39 @@ export default function Game() {
 
   const onBrew = useCallback(() => {
     if (!round || brewStream.isLoading) return
-    judgment.abort()
+
+    const lastState = judgment.cancelTurn()
+    const capturedNote = lastState?.scientist_note && lastState.scientist_note.length >= 20
+      ? lastState.scientist_note : null
+
+    // Synchronous snapshot: React hasn't flushed addNote() yet, so
+    // memory.accumulatedNotes is stale. Build the array manually.
+    // Map NoteEntry[] → string[] for API (interrupted flag is display-only).
+    const notesAsStrings = memory.accumulatedNotes.map(n => n.text)
+    const finalNotes = capturedNote
+      ? [...notesAsStrings, capturedNote]
+      : notesAsStrings
+    const finalMoods = lastState?.lab_mood
+      ? [...memory.moodTrajectory, lastState.lab_mood]
+      : memory.moodTrajectory
+
+    // Also update state for UI consistency (not read by submit above)
+    if (capturedNote) memory.addNote(capturedNote)
+    if (lastState?.lab_mood) memory.addMood(lastState.lab_mood)
+
     setBrewError(false)
     setPhase('brewing')
     brewStream.submit({
       scenario: round.scenario,
       selections,
-      accumulatedNotes: memory.accumulatedNotes,
-      moodTrajectory: memory.moodTrajectory,
+      accumulatedNotes: finalNotes,
+      moodTrajectory: finalMoods,
     })
   }, [round, selections, memory.accumulatedNotes, memory.moodTrajectory, brewStream, judgment])
 
   // --- Play Again ---
   const onPlayAgain = useCallback(() => {
-    judgment.abort()
-    judgment.reset()
+    judgment.cancelTurn()  // ignore return — full reset
     imageAbortRef.current?.abort()
     setImageUrl(null)
     setImageLoading(false)
@@ -186,6 +215,7 @@ export default function Game() {
                 judgmentKey={judgment.judgmentKey}
                 priorNotes={memory.accumulatedNotes}
                 brewReady={brewReady}
+                onInterrupt={onInterrupt}
               />
             </div>
           )}
