@@ -38,7 +38,9 @@ export default function Game() {
   useEffect(() => { moodTrajectoryRef.current = moodTrajectory }, [moodTrajectory])
 
   // Field Log counter -- starts at a random high number (Station 7 has been running forever).
-  const [fieldLogNumber, setFieldLogNumber] = useState(() => Math.floor(Math.random() * 200) + 30)
+  // Use a fixed initial value to avoid SSR/client hydration mismatch, then randomize on mount.
+  const [fieldLogNumber, setFieldLogNumber] = useState(47)
+  useEffect(() => { setFieldLogNumber(Math.floor(Math.random() * 200) + 30) }, [])
   const [bestiary, setBestiary] = useState<Creature[]>([])
   const abortRef = useRef<AbortController | null>(null)
 
