@@ -28,7 +28,6 @@ export default function Game() {
   const [bestiary, setBestiary] = useState<BestiaryEntry[]>([])
   const [overlayEntry, setOverlayEntry] = useState<BestiaryEntry | null>(null)
   const [committedMotion, setCommittedMotion] = useState<MotionState>('resolved')
-  const [swapCount, setSwapCount] = useState(0)
 
   // Image generation state
   const [imageLoading, setImageLoading] = useState(false)
@@ -67,12 +66,6 @@ export default function Game() {
 
   // --- Trait selection handler ---
   const onTraitSelect = useCallback((category: keyof Selections, trait: Trait) => {
-    // Track swaps (re-selections in already-filled categories) for mood activation
-    const currentTrait = selectionsRef.current[category]
-    if (currentTrait && currentTrait.name !== trait.name) {
-      setSwapCount(prev => prev + 1)
-    }
-
     // 1. Terminate previous turn atomically
     // LabNotes handles frozen text display and interruption counting
     // via onInterrupt callback (fires when typewriter is mid-drip).
@@ -193,7 +186,6 @@ export default function Game() {
     setSelections({ form: null, feature: null, ability: null, flaw: null })
     memory.clear()
     setCommittedMotion('resolved')
-    setSwapCount(0)
     setBrewError(false)
     document.documentElement.style.removeProperty('--mood-color')
     setPhase('loading')
@@ -214,16 +206,16 @@ export default function Game() {
     setOverlayEntry(entry)
   }, [])
 
-  // --- Ambient mood (activates after first trait swap) ---
+  // --- Ambient mood (activates on first judgment) ---
   // Only sets --mood-color when a new valid color arrives.
   // Does NOT remove on labState change — mood persists through brew/reveal.
   // Cleared explicitly in onPlayAgain and on unmount.
   useEffect(() => {
     const primaryColor = judgment.labState?.orb_colors?.[0]
-    if (swapCount >= 1 && primaryColor && /^#[0-9a-fA-F]{6}$/.test(primaryColor)) {
+    if (primaryColor && /^#[0-9a-fA-F]{6}$/.test(primaryColor)) {
       document.documentElement.style.setProperty('--mood-color', primaryColor)
     }
-  }, [judgment.labState?.orb_colors, swapCount])
+  }, [judgment.labState?.orb_colors])
 
   // Cleanup --mood-color on unmount only
   useEffect(() => {
