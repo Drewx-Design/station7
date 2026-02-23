@@ -42,8 +42,8 @@ export const MicroJudgmentSchema = z.object({
   motion_state: z.enum(['agitated', 'curious', 'resolved']).describe(
     'Energy level of the lab atmosphere. agitated = alarmed/fascinated/horrified (fast, chaotic). curious = intrigued/uncertain/analyzing (medium, searching). resolved = satisfied/resigned/triumphant (slow, settled).'
   ),
-  orb_colors: z.array(z.string()).min(2).max(3).describe(
-    '2-3 hex colors (#RRGGBB) for background atmosphere orbs. First color is primary mood. Second is complementary or contrasting. Optional third adds depth. Greens/ambers for viable, teals/purples for uncertain, deep blues for doomed, warm golds for triumphant.'
+  mood_color: z.string().describe(
+    'Single hex color (#RRGGBB) for the lab atmosphere. Greens/ambers for viable, teals/purples for uncertain, deep reds/magentas for alarmed, deep blues for doomed, warm golds for triumphant. Should shift as your assessment evolves.'
   ),
   reading: z.string().describe('ALL-CAPS instrument readout, e.g. "BIOLOGICAL COHERENCE: 67% | SCENARIO VIABILITY: UNCERTAIN"'),
   scientist_note: z.string().describe('MAXIMUM 2 thoughts, complete or not. Fragments and abandoned clauses are expected. Field journal register, plain text, no markdown or asterisks.'),

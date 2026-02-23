@@ -136,15 +136,13 @@ MOTION STATE: Choose the lab's atmospheric energy.
 - "curious" when you are intrigued, uncertain, puzzled, skeptical, or contemplative. The lab searches.
 - "resolved" when you are satisfied, resigned, triumphant, calm, or accepting. The lab settles.
 
-ORB COLORS: Choose 2-3 hex colors (#RRGGBB) for the lab atmosphere.
-- First color is primary (dominates the ambient mood).
-- Second color is complementary or contrasting (adds depth).
-- Optional third color when the mood warrants complexity.
+MOOD COLOR: Choose ONE hex color (#RRGGBB) for the lab atmosphere. This becomes the entire background.
 - Greens/ambers for biologically viable creatures.
 - Teals/purples for uncertain or unstable combinations.
+- Deep reds/magentas for alarmed or horrified states.
 - Deep blues/indigos for doomed specimens.
 - Warm golds/oranges for triumphant breakthroughs.
-- Colors should shift as your assessment evolves. Don't repeat the same palette.
+- The color should shift as your assessment evolves. Don't repeat the same color.
 
 The "scientist_note" is the star -- 2 thoughts maximum, complete or not. Field journal register. If it reads like a tweet or an essay, rewrite it.`
 

@@ -211,11 +211,11 @@ export default function Game() {
   // Does NOT remove on labState change — mood persists through brew/reveal.
   // Cleared explicitly in onPlayAgain and on unmount.
   useEffect(() => {
-    const primaryColor = judgment.labState?.orb_colors?.[0]
-    if (primaryColor && /^#[0-9a-fA-F]{6}$/.test(primaryColor)) {
-      document.documentElement.style.setProperty('--mood-color', primaryColor)
+    const color = judgment.labState?.mood_color
+    if (color && /^#[0-9a-fA-F]{6}$/.test(color)) {
+      document.documentElement.style.setProperty('--mood-color', color)
     }
-  }, [judgment.labState?.orb_colors])
+  }, [judgment.labState?.mood_color])
 
   // Cleanup --mood-color on unmount only
   useEffect(() => {
@@ -240,7 +240,7 @@ export default function Game() {
       <MoodBackground
         motionState={committedMotion}
         phase={phase}
-        moodColor={judgment.labState?.orb_colors?.[0]}
+        moodColor={judgment.labState?.mood_color}
       />
       <div className="game-layout" data-phase={phase}>
         <SiteHeader fieldLogNumber={fieldLogNumber} />

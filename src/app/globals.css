@@ -122,31 +122,32 @@ body {
   background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
   pointer-events: none;
   z-index: 1;
-  opacity: 0.03;
+  opacity: 0.06;
   transition: opacity 0.6s ease-out;
 }
 
 /* --- Noise intensity by motion state --- */
 .mood-background[data-motion="resolved"]::after {
-  opacity: 0.03;
+  opacity: 0.06;
 }
 
 .mood-background[data-motion="curious"]::after {
-  opacity: 0.05;
+  opacity: 0.15;
   animation: noiseJitter 0.3s steps(3) infinite;
 }
 
 .mood-background[data-motion="agitated"]::after {
-  opacity: 0.08;
-  animation: noiseJitter 0.1s steps(4) infinite;
+  opacity: 0.25;
+  animation: noiseJitter 0.08s steps(5) infinite;
 }
 
 @keyframes noiseJitter {
   0%   { transform: translate(0, 0); }
-  25%  { transform: translate(-2px, 1px); }
-  50%  { transform: translate(1px, -2px); }
-  75%  { transform: translate(-1px, 2px); }
-  100% { transform: translate(2px, -1px); }
+  20%  { transform: translate(-3px, 2px); }
+  40%  { transform: translate(2px, -3px); }
+  60%  { transform: translate(-2px, 3px); }
+  80%  { transform: translate(3px, -1px); }
+  100% { transform: translate(-1px, -2px); }
 }
 
 /* Suppress noise jitter during brew/reveal */
