@@ -240,7 +240,7 @@ export default function Game() {
       <MoodBackground
         motionState={committedMotion}
         phase={phase}
-        orbColors={judgment.labState?.orb_colors}
+        moodColor={judgment.labState?.orb_colors?.[0]}
       />
       <div className="game-layout" data-phase={phase}>
         <SiteHeader fieldLogNumber={fieldLogNumber} />
